@@ -31,7 +31,7 @@ const venues = [
         price: '주대 18만원 이상, TC 10만원 이상',
         desc: `${region.name} 중심 클래식 셔츠룸. 깔끔한 응대와 흐트러짐 없는 동선.`,
         features: ['클래식 무드', '빠른 세팅', '접근성 우수', '기본에 충실'],
-        img: '/images/venues/shirtsroom_main.webp',
+        img: '/images/venues/shirts_4.webp',
     },
     {
         id: 's-2',
@@ -41,7 +41,7 @@ const venues = [
         price: '주대 18만원 이상, TC 10만원 이상',
         desc: `${region.name} 핫플레이스 모던 셔츠룸. 도시형 인테리어와 빠른 초이스.`,
         features: ['모던 인테리어', '초이스 중심', '핫플레이스', '경쾌한 분위기'],
-        img: '/images/venues/shirtsroom_main.webp',
+        img: '/images/venues/shirts_5.webp',
     }
 ];
 
@@ -144,7 +144,7 @@ const sections = [
                 <div class="grid grid-cols-3 gap-4">
                     {[1, 2, 3].map((i) => (
                         <div class="aspect-[3/4] rounded-2xl overflow-hidden border border-slate-800 hover:border-blue-500/50 transition-all duration-300 group">
-                            <img src={`/images/venues/shirtsroom_main.webp`} alt={`${region.name} 셔츠룸 이미지`} loading="lazy" width="300" height="400"
+                            <img src={`/images/venues/shirts_${i}.webp`} alt={`${region.name} 셔츠룸 이미지 ${i}`} loading="lazy" width="300" height="400"
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                         </div>
                     ))}

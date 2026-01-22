@@ -31,7 +31,7 @@ const venues = [
         price: '주대 18만원 이상, TC 10만원 이상',
         desc: `${region.name} 중심의 도시형 하이퍼블릭. 도심 비즈니스 방문객의 조용한 접대/술자리에 맞춘 프라이빗 라운지.`,
         features: ['프라이빗 예약', '조용한 라운지', '수원역 접근', '비즈니스 동선'],
-        img: '/images/venues/highpub_main.webp',
+        img: '/images/venues/highpublic_5.webp',
     },
     {
         id: 'hp-2',
@@ -41,7 +41,7 @@ const venues = [
         price: '주대 18만원 이상, TC 10만원 이상',
         desc: '수원시청역 인근 대형 구성. 중심 상권 분위기와 파티형 세팅으로 단체 모임에 적합.',
         features: ['대형 룸', '파티 조명', '수원시청역 중심', '단체 환영'],
-        img: '/images/venues/highpub_main.webp',
+        img: '/images/venues/highpublic_6.webp',
     }
 ];
 
@@ -143,7 +143,7 @@ const sections = [
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         {[1, 2, 3, 4].map((i) => (
                             <div class="aspect-[3/4] rounded-2xl overflow-hidden border border-slate-800 hover:border-amber-500/50 transition-all duration-300 group">
-                                <img src={`/images/venues/highpub_main.webp`} alt={`${region.name} 하이퍼블릭 이미지`} loading="lazy" width="300" height="400"
+                                <img src={`/images/venues/highpublic_${i}.webp`} alt={`${region.name} 하이퍼블릭 이미지 ${i}`} loading="lazy" width="300" height="400"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                             </div>
                         ))}

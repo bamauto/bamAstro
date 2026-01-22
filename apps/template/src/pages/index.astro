@@ -1,22 +1,26 @@
 ---
 import { PageLayout, LocalBusinessSchema, HeroSection, FeaturesSection, GallerySection, IntroSection, AnalysisSection, HotEventSection, BlogSection, VenuePreviewSection } from '@bamastro/ui';
 import { region } from '@/config/region';
+import { getBlogPosts } from '@/lib/supabase';
 
 const seoProps = {
   title: `${region.name} 유흥 예약·추천 | ${region.landmarks.join('·')} ${region.seo.titleSuffix}`,
   description: region.seo.description,
 };
+
+// Fetch blog posts from Supabase (images are embedded in posts)
+const blogPosts = await getBlogPosts();
 ---
 
 <PageLayout {...seoProps} region={region}>
   <LocalBusinessSchema region={region} />
-  
+
   <HeroSection region={region} />
   <FeaturesSection />
   <GallerySection />
   <IntroSection />
   <AnalysisSection />
   <HotEventSection />
-  <BlogSection />
+  <BlogSection posts={blogPosts} />
   <VenuePreviewSection region={region} />
 </PageLayout>

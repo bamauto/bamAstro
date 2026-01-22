@@ -31,7 +31,7 @@ const venues = [
         price: '주대 18만원 이상, TC 10만원 이상',
         desc: `${region.name} 테마형 기모노룸. 일본풍 무드와 포토 포인트.`,
         features: ['테마 의상', '포토존', '접근성 우수', '이색 무드'],
-        img: '/images/venues/kimono_main.webp',
+        img: '/images/venues/kimono_4.webp',
     },
     {
         id: 'km-2',
@@ -41,7 +41,7 @@ const venues = [
         price: '주대 18만원 이상, TC 10만원 이상',
         desc: `${region.name} 모던 기모노룸. 고급스러운 무드와 세련된 연출.`,
         features: ['모던 테마', '감각 연출', '중심상권', '프라이빗'],
-        img: '/images/venues/kimono_main.webp',
+        img: '/images/venues/kimono_5.webp',
     }
 ];
 
@@ -139,7 +139,7 @@ const sections = [
                 <div class="grid grid-cols-3 gap-4">
                     {[1, 2, 3].map((i) => (
                         <div class="aspect-[3/4] rounded-2xl overflow-hidden border border-slate-800 hover:border-rose-500/50 transition-all duration-300 group">
-                            <img src={`/images/venues/kimono_main.webp`} alt={`${region.name} 기모노룸 이미지`} loading="lazy" width="300" height="400"
+                            <img src={`/images/venues/kimono_${i}.webp`} alt={`${region.name} 기모노룸 이미지 ${i}`} loading="lazy" width="300" height="400"
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                         </div>
                     ))}

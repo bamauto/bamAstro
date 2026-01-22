@@ -31,7 +31,7 @@ const venues = [
         price: '주대 18만원 이상, TC 10만원 이상',
         desc: `${region.name} 비즈니스 룸살롱. 도심 비즈니스 방문객 접대/회의에 맞춘 세팅.`,
         features: ['비즈니스 세팅', '조용한 룸', '접근성 우수', '접대 중심'],
-        img: '/images/venues/roomsalon_main.webp',
+        img: '/images/venues/roomsalon_4.webp',
     },
     {
         id: 'rs-2',
@@ -41,7 +41,7 @@ const venues = [
         price: '주대 18만원 이상, TC 10만원 이상',
         desc: `${region.name} 중심 하이엔드 룸살롱. 품격 있는 서비스와 프라이빗 룸.`,
         features: ['하이엔드 서비스', '프라이빗 룸', '중심상권', '품격'],
-        img: '/images/venues/roomsalon_main.webp',
+        img: '/images/venues/roomsalon_5.webp',
     }
 ];
 
@@ -142,7 +142,7 @@ const sections = [
                     <div class="grid grid-cols-3 gap-4">
                          {[1, 2, 3].map((i) => (
                             <div class="aspect-[3/4] rounded-2xl overflow-hidden border border-slate-800 hover:border-amber-500/50 transition-all duration-300 group">
-                                <img src={`/images/venues/roomsalon_main.webp`} alt={`${region.name} 룸살롱 이미지`} loading="lazy" width="300" height="400"
+                                <img src={`/images/venues/roomsalon_${i}.webp`} alt={`${region.name} 룸살롱 이미지 ${i}`} loading="lazy" width="300" height="400"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                             </div>
                         ))}

@@ -31,7 +31,7 @@ const venues = [
         price: '주대 18만원 이상, TC 10만원 이상',
         desc: '수원역에서 접근 좋은 파티형 가라오케. 도심 비즈니스 방문객 회식/모임에 맞춘 대형 룸.',
         features: ['대형 룸', '음향 특화', '수원역 접근', '회식 추천'],
-        img: '/images/venues/karaoke_main.webp',
+        img: '/images/venues/karaoke_5.webp',
     },
     {
         id: 'k-2',
@@ -41,7 +41,7 @@ const venues = [
         price: '주대 18만원 이상, TC 10만원 이상',
         desc: '수원시청역 라운지 톤 가라오케. 음향 퀄리티와 조용한 대화 모두 만족.',
         features: ['라운지 무드', '고급 사운드', '수원시청역 중심', '프라이빗'],
-        img: '/images/venues/karaoke_main.webp',
+        img: '/images/venues/karaoke_6.webp',
     }
 ];
 
@@ -144,7 +144,7 @@ const sections = [
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         {[1, 2, 3, 4].map((i) => (
                             <div class="aspect-[3/4] rounded-2xl overflow-hidden border border-slate-800 hover:border-purple-500/50 transition-all duration-300 group">
-                                <img src={`/images/venues/karaoke_main.webp`} alt={`${region.name} 가라오케 이미지`} loading="lazy" width="300" height="400"
+                                <img src={`/images/venues/karaoke_${i}.webp`} alt={`${region.name} 가라오케 이미지 ${i}`} loading="lazy" width="300" height="400"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                             </div>
                         ))}

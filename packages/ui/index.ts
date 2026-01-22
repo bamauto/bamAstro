@@ -5,10 +5,7 @@ export { default as Footer } from './src/components/common/Footer.astro';
 export { default as Breadcrumbs } from './src/components/common/Breadcrumbs.astro';
 export { default as SEO } from './src/components/common/SEO.astro';
 export { default as LocalBusinessSchema } from './src/components/schema/LocalBusinessSchema.astro';
-export { default as BreadcrumbSchema } from './src/components/schema/BreadcrumbSchema.astro';
 export { default as FAQSchema } from './src/components/schema/FAQSchema.astro';
-export { default as ArticleSchema } from './src/components/schema/ArticleSchema.astro';
-export { default as OrganizationSchema } from './src/components/schema/OrganizationSchema.astro';
 // Home Components
 export { default as HeroSection } from './src/components/home/HeroSection.astro';
 export { default as FeaturesSection } from './src/components/home/FeaturesSection.astro';

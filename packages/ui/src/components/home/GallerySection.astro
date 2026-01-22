@@ -1,5 +1,5 @@
 ---
-const images = [1, 2, 3, 4, 5, 6, 7];
+const images = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 ---
 
 <section class="py-24 bg-transparent overflow-hidden">
@@ -22,13 +22,8 @@ const images = [1, 2, 3, 4, 5, 6, 7];
       {[...images, ...images].map((num) => (
         <div class="inline-block px-4">
           <div class="w-[300px] h-[450px] md:w-[400px] md:h-[600px] rounded-3xl overflow-hidden border border-slate-800 shadow-2xl relative group/card bg-slate-900/20 backdrop-blur-sm">
-             {/* Placeholder for images if not available */}
-             <div class="w-full h-full bg-slate-800/30 flex items-center justify-center text-slate-700">
-                <span class="text-4xl">Image {num}</span>
-             </div>
-             {/* Replace with actual image tag when images are available */}
-             {/* <img src={`/images/partners/${num}.webp`} class="w-full h-full object-cover" /> */}
-             
+             <img src={`/images/partners/partner_${num}.webp`} alt={`프리미엄 파트너 ${num}`} loading="lazy" class="w-full h-full object-cover" />
+
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover/card:opacity-40 transition-opacity"></div>
             <div class="absolute bottom-6 left-8">
               <span class="text-purple-500 font-bold tracking-widest text-sm uppercase">프리미엄 선택</span>

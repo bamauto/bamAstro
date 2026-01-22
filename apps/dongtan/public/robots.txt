@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://dongtanhipublic.com/sitemap-index.xml
