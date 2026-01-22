@@ -1,0 +1,62 @@
+---
+import { PageLayout } from '@bamastro/ui';
+import { region } from '@/config/region';
+
+const seoProps = {
+  title: `연락처 및 예약안내`,
+  description: `${region.name} ${region.seo.titleSuffix} 예약 및 상담 문의`,
+};
+---
+
+<PageLayout {...seoProps} region={region}>
+  <div class="py-20 max-w-4xl mx-auto text-center">
+    <div class="animate-fade-in-up">
+      <h1 class="text-4xl font-bold text-white mb-2">연락처</h1>
+      <p class="text-slate-400 text-lg mb-12">365일 24시간 언제든 편하게 문의주세요.</p>
+    </div>
+    
+    <div class="grid md:grid-cols-2 gap-8 animate-fade-in-up delay-100">
+      <!-- Phone Card -->
+      <a href={`tel:${region.phone}`} class="glass-card p-10 group flex flex-col items-center justify-center">
+        <div class="w-20 h-20 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">전화 문의</h3>
+        <p class="text-3xl font-bold text-gradient mb-2">{region.phoneFormatted}</p>
+        <span class="text-sm text-slate-500">터치 시 바로 연결됩니다</span>
+      </a>
+
+      <!-- Kakao Card -->
+      <a href={region.kakaoLink} target="_blank" class="glass-card p-10 group flex flex-col items-center justify-center border-yellow-500/10 hover:border-yellow-500/30 hover:shadow-yellow-500/10">
+        <div class="w-20 h-20 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 3C6.48 3 2 6.48 2 10.76c0 2.79 1.86 5.28 4.73 6.75-.24.87-1.7 5.86-1.76 6.2 0 0-.04.28.18.36.17.06.36 0 .58-.29 3.65-2.45 5.29-3.79 6.27-4.48 9.53 1.22 11.74-5.91 9.74-8.54C20.61 6.55 16.63 3 12 3z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">카카오톡 문의</h3>
+        <p class="text-3xl font-bold text-white mb-2">{region.kakaoId}</p>
+        <span class="text-sm text-slate-500">실시간 채팅 상담</span>
+      </a>
+    </div>
+
+    <!-- Additional Info -->
+    <div class="mt-12 glass p-8 rounded-2xl animate-fade-in-up delay-200">
+      <div class="grid sm:grid-cols-3 gap-8">
+        <div>
+          <span class="block text-slate-500 text-sm mb-1">텔레그램</span>
+          <a href={region.telegramLink} target="_blank" class="text-lg font-medium text-white hover:text-indigo-400 transition">{region.telegramId}</a>
+        </div>
+        <div>
+          <span class="block text-slate-500 text-sm mb-1">이메일</span>
+          <a href={`mailto:${region.email}`} class="text-lg font-medium text-white hover:text-indigo-400 transition">{region.email}</a>
+        </div>
+        <div>
+          <span class="block text-slate-500 text-sm mb-1">위치</span>
+          <span class="text-lg font-medium text-white">{region.address.city} {region.address.street}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</PageLayout>

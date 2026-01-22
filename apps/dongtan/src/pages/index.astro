@@ -1,0 +1,21 @@
+---
+import { PageLayout, LocalBusinessSchema, HeroSection, FeaturesSection, GallerySection, IntroSection, AnalysisSection, HotEventSection, VenuePreviewSection } from '@bamastro/ui';
+import { region } from '@/config/region';
+
+const seoProps = {
+  title: `${region.name} 유흥 예약·추천 | ${region.landmarks.join('·')} ${region.seo.titleSuffix}`,
+  description: region.seo.description,
+};
+---
+
+<PageLayout {...seoProps} region={region}>
+  <LocalBusinessSchema region={region} />
+  
+  <HeroSection region={region} />
+  <FeaturesSection />
+  <GallerySection />
+  <IntroSection />
+  <AnalysisSection />
+  <HotEventSection />
+  <VenuePreviewSection region={region} />
+</PageLayout>

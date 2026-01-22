@@ -1,0 +1,50 @@
+---
+import { Crown, MapPin, Zap, Users } from 'lucide-astro';
+
+const cards = [
+    {
+        Icon: Crown,
+        title: "경기남부 130만 중심도시",
+        desc: "경기남부 중심도시 수원은 <strong class=\"text-purple-400\">수원역·수원시청역·팔달문</strong> 일대 상권이 촘촘하게 발달해 있습니다. <strong class=\"text-white\">취향과 예산에 맞는 선택지</strong>가 풍부합니다."
+    },
+    {
+        Icon: MapPin,
+        title: "수원역 5개 노선 환승",
+        desc: "<strong class=\"text-purple-400\">광역 노선</strong>이 만나는 수원역은 경기남부 대표 교통 허브입니다. 광역 이동이 편해 <strong class=\"text-white\">야간 동선 설계</strong>가 수월합니다."
+    },
+    {
+        Icon: Zap,
+        title: "삼성전자 배후도시",
+        desc: "<strong class=\"text-purple-400\">삼성디지털시티</strong> 등 대형 사업장이 있어 고소득 직장인 수요가 집중됩니다. <strong class=\"text-white\">조용한 비즈니스 접대</strong>에 맞춘 프리미엄 시장이 형성되어 있습니다."
+    },
+    {
+        Icon: Users,
+        title: "예산별 맞춤 추천",
+        desc: "<strong class=\"text-purple-400\">수원역 실속형</strong>부터 <strong class=\"text-purple-400\">수원시청역 프리미엄</strong>까지 다양한 선택지를 제안합니다."
+    }
+];
+---
+
+<section class="py-24 bg-transparent">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16 relative">
+            <span class="text-purple-400 font-bold tracking-[0.2em] text-sm md:text-base uppercase mb-3 animate-fade-in-up block">지역 특화 분석</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 relative z-10 animate-fade-in-up delay-100 drop-shadow-sm">왜 수원인가?</h2>
+            <div class="w-1 h-12 bg-gradient-to-b from-purple-500 to-transparent mx-auto mt-6"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {cards.map((card) => (
+                <article class="bg-slate-800/30 p-8 rounded-2xl border border-slate-700 hover:border-purple-500/30 transition-all">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center text-purple-500">
+                             <card.Icon class="w-6 h-6" />
+                        </div>
+                        <h3 class="text-xl font-bold text-white">{card.title}</h3>
+                    </div>
+                    <p class="text-slate-300 leading-relaxed" set:html={card.desc} />
+                </article>
+            ))}
+        </div>
+    </div>
+</section>
