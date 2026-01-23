@@ -1823,3 +1823,237 @@ pnpm --filter @bamastro/gangnam build
 # 성공 확인 필요
 ```
 
+---
+
+## Phase 15: Vercel 배포 가이드
+
+> 신규 지역 앱을 Vercel에 배포하는 상세 가이드입니다.
+> monorepo 구조에서 특정 앱만 배포하는 방법을 포함합니다.
+
+### 15.1 배포 사전 조건
+
+- [ ] Git 저장소에 코드 푸시 완료
+- [ ] Vercel 계정 및 팀 설정 완료
+- [ ] 도메인 준비 (예: high-karaoke.com)
+
+### 15.2 Vercel 프로젝트 생성 (대시보드)
+
+#### 15.2.1 새 프로젝트 생성
+
+1. [Vercel Dashboard](https://vercel.com/dashboard) 접속
+2. **Add New...** → **Project** 클릭
+3. **Import Git Repository** 섹션에서 저장소 선택
+   - Repository: `bamauto/bamAstro`
+
+#### 15.2.2 프로젝트 설정 (중요!)
+
+| 설정 항목 | 값 | 설명 |
+|----------|-----|------|
+| **Project Name** | `bamastro-gangnam` | 프로젝트 식별자 |
+| **Framework Preset** | `Astro` | 자동 감지됨 |
+| **Root Directory** | `apps/gangnam` | ⚠️ **필수 설정** |
+| **Build Command** | `pnpm build` | 기본값 사용 |
+| **Output Directory** | `dist` | 기본값 사용 |
+| **Install Command** | `pnpm install` | 기본값 사용 |
+
+#### 15.2.3 Root Directory 설정 방법
+
+```
+1. "Root Directory" 옆 "Edit" 클릭
+2. 경로 입력: apps/gangnam
+3. "Save" 클릭
+```
+
+**⚠️ 주의:** monorepo 구조에서 Root Directory를 설정하지 않으면 빌드가 실패합니다.
+
+#### 15.2.4 환경 변수 설정 (필요시)
+
+| 변수명 | 값 | 용도 |
+|--------|-----|------|
+| `PUBLIC_SUPABASE_URL` | `https://xxx.supabase.co` | Supabase URL |
+| `PUBLIC_SUPABASE_ANON_KEY` | `eyJhbG...` | Supabase 공개 키 |
+
+### 15.3 도메인 연결
+
+#### 15.3.1 Vercel 도메인 설정
+
+1. 프로젝트 → **Settings** → **Domains**
+2. **Add** 클릭
+3. 도메인 입력: `high-karaoke.com`
+4. **Add** 확인
+
+#### 15.3.2 DNS 설정 (도메인 등록기관)
+
+**A 레코드 (Apex Domain):**
+```
+Type: A
+Name: @
+Value: 76.76.21.21
+TTL: 3600
+```
+
+**CNAME 레코드 (www):**
+```
+Type: CNAME
+Name: www
+Value: cname.vercel-dns.com
+TTL: 3600
+```
+
+#### 15.3.3 SSL 인증서
+
+Vercel은 자동으로 Let's Encrypt SSL 인증서를 발급합니다.
+- 발급 시간: 보통 1-5분
+- 상태 확인: Domains 페이지에서 "Valid Configuration" 확인
+
+### 15.4 Vercel CLI 배포 (대안)
+
+#### 15.4.1 CLI 설치 및 로그인
+
+```bash
+# 설치
+npm i -g vercel
+
+# 로그인
+vercel login
+```
+
+#### 15.4.2 프로젝트 연결 및 배포
+
+```bash
+# 앱 디렉토리로 이동
+cd apps/gangnam
+
+# 첫 배포 (프로젝트 설정)
+vercel
+
+# 프로덕션 배포
+vercel --prod
+```
+
+#### 15.4.3 CLI 설정 프롬프트
+
+```
+? Set up and deploy "~/bamAstro/apps/gangnam"? [Y/n] y
+? Which scope do you want to deploy to? [선택]
+? Link to existing project? [y/N] n
+? What's your project's name? bamastro-gangnam
+? In which directory is your code located? ./
+? Want to modify these settings? [y/N] n
+```
+
+### 15.5 자동 배포 설정
+
+#### 15.5.1 Git 통합
+
+Vercel은 기본적으로 `main` 브랜치에 푸시 시 자동 배포됩니다.
+
+**배포 트리거:**
+- `main` 브랜치 푸시 → 프로덕션 배포
+- PR 생성 → 프리뷰 배포
+
+#### 15.5.2 특정 경로만 배포 트리거
+
+`vercel.json`에서 설정:
+
+```json
+{
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  },
+  "ignoreCommand": "git diff HEAD^ HEAD --quiet -- . ../../packages/"
+}
+```
+
+이 설정은 `apps/gangnam/` 또는 `packages/` 변경 시에만 배포를 트리거합니다.
+
+### 15.6 배포 확인 체크리스트
+
+- [ ] 빌드 성공 확인 (Vercel 대시보드 → Deployments)
+- [ ] 프로덕션 URL 접속 확인
+- [ ] 도메인 SSL 인증서 발급 확인
+- [ ] 모든 페이지 정상 로딩 확인
+- [ ] sitemap-index.xml 접근 확인
+- [ ] robots.txt 접근 확인
+- [ ] 모바일 반응형 확인
+
+### 15.7 트러블슈팅
+
+#### 15.7.1 빌드 실패: "Module not found"
+
+**원인:** monorepo 패키지 참조 문제
+**해결:**
+```bash
+# Root Directory 확인
+# apps/gangnam으로 설정되어 있는지 확인
+
+# 로컬에서 빌드 테스트
+cd apps/gangnam && pnpm build
+```
+
+#### 15.7.2 빌드 실패: "pnpm not found"
+
+**원인:** 패키지 매니저 설정 문제
+**해결:** Vercel 프로젝트 설정에서:
+- Framework Preset: `Astro`
+- Install Command: `pnpm install`
+
+#### 15.7.3 환경 변수 미적용
+
+**원인:** 환경 변수 Scope 설정
+**해결:**
+1. Settings → Environment Variables
+2. 해당 변수의 Environments 확인 (Production, Preview, Development)
+3. 필요한 환경에 체크
+
+#### 15.7.4 도메인 SSL 오류
+
+**원인:** DNS 전파 지연
+**해결:**
+- DNS 전파 대기 (최대 48시간)
+- DNS Checker로 전파 상태 확인: https://dnschecker.org
+
+### 15.8 작업 완료 기록
+
+#### 강남 (gangnam) Vercel 배포 - 2026-01-24
+
+**Git 작업:**
+```bash
+# 커밋
+git add apps/gangnam/ NEW_REGION_CREATION_LOG.md
+git commit -m "feat(gangnam): 강남 앱 생성 및 SEO 전면 최적화"
+
+# 푸시
+git push origin main
+```
+
+**커밋 해시:** `4ad8c2a5`
+
+**Vercel 프로젝트 설정:**
+| 항목 | 값 |
+|------|-----|
+| Project Name | `bamastro-gangnam` |
+| Framework | Astro |
+| Root Directory | `apps/gangnam` |
+| Domain | `high-karaoke.com` |
+
+**배포 상태:**
+- [x] Git 푸시 완료
+- [ ] Vercel 프로젝트 생성 (대시보드에서 수동 설정 필요)
+- [ ] Root Directory 설정: `apps/gangnam`
+- [ ] 도메인 연결: `high-karaoke.com`
+- [ ] SSL 인증서 발급 확인
+
+---
+
+### 지역별 Vercel 프로젝트 목록
+
+| 지역 | 프로젝트명 | Root Directory | 도메인 | 상태 |
+|------|-----------|----------------|--------|------|
+| 분당 | bamastro-bundang | apps/bundang | bundang-karaoke.com | ✅ 운영중 |
+| 수원 | bamastro-suwon | apps/suwon | public-karaoke.com | ✅ 운영중 |
+| 동탄 | bamastro-dongtan | apps/dongtan | dongtan-karaoke.com | ✅ 운영중 |
+| 강남 | bamastro-gangnam | apps/gangnam | high-karaoke.com | ⏳ 설정 필요 |
+
