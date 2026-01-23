@@ -1,0 +1,82 @@
+# ====================================
+# SEO Robots.txt - high-karaoke.com
+# 강남 가라오케/유흥 가이드 사이트
+# ====================================
+# Last Updated: 2026-01-23
+# 최적화: 글로벌 + 한국 검색엔진 + 스니펫 가시성
+
+# ====================================
+# Default rules for all crawlers
+# ====================================
+User-agent: *
+Allow: /
+
+# Disallow sensitive pages
+Disallow: /api/
+Disallow: /404
+Disallow: /admin/
+Disallow: /internal/
+Disallow: /search?
+
+# Allow static assets (Astro builds)
+Allow: /_astro/*.css$
+Allow: /_astro/*.js$
+Allow: /images/
+Allow: /fonts/
+
+# ====================================
+# Google-specific rules (Featured Snippets)
+# ====================================
+User-agent: Googlebot
+Allow: /
+max-snippet: -1
+max-image-preview: large
+max-video-preview: -1
+
+# ====================================
+# Naver (Korean Search Engine - Priority)
+# 네이버 스니펫 최적화 (한글 160자)
+# ====================================
+User-agent: Yeti
+Allow: /
+Crawl-delay: 0.5
+max-snippet: 160
+max-image-preview: large
+
+User-agent: Yeti-JSC
+Allow: /
+Crawl-delay: 0.5
+max-snippet: 160
+max-image-preview: large
+
+# ====================================
+# Daum (Korean Search Engine)
+# 다음 크롤러 최적화
+# ====================================
+User-agent: Daumoa
+Allow: /
+Crawl-delay: 1
+max-snippet: 150
+max-image-preview: large
+
+# ====================================
+# Bing
+# ====================================
+User-agent: Bingbot
+Allow: /
+max-snippet: -1
+max-image-preview: large
+
+# ====================================
+# Other Search Engines
+# ====================================
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: MojeekBot
+Allow: /
+
+# ====================================
+# Sitemaps
+# ====================================
+Sitemap: https://high-karaoke.com/sitemap-index.xml
