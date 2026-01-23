@@ -1,5 +1,5 @@
 # bamAstro SEO Robots.txt
-# https://bundanghipublic.com
+# https://public-karaoke.com
 
 User-agent: *
 Allow: /
@@ -20,7 +20,7 @@ User-agent: Yeti
 Allow: /
 
 # Sitemap locations
-Sitemap: https://bundanghipublic.com/sitemap-index.xml
+Sitemap: https://public-karaoke.com/sitemap-index.xml
 
 # Crawl-delay for polite crawling (optional)
 # Crawl-delay: 1

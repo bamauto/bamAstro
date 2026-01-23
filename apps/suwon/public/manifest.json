@@ -1,7 +1,7 @@
 {
-  "name": "분당 유흥 가이드 - 서우실장",
-  "short_name": "분당VIP",
-  "description": "분당 유흥 가이드 | 서현역 로데오거리·야탑역 먹자골목 중심 하이퍼블릭·가라오케·셔츠룸 예약",
+  "name": "수원 유흥 가이드 - 서우실장",
+  "short_name": "수원VIP",
+  "description": "수원 유흥 가이드 | 수원역 로데오거리·팔달문 먹자골목 중심 하이퍼블릭·가라오케·셔츠룸 예약",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020617",

@@ -46,7 +46,7 @@ export default defineConfig({
           item.changefreq = 'monthly';
         }
         // 지역 가이드 페이지
-        else if (item.url.includes('-seohyeon') || item.url.includes('-yatap') || item.url.includes('-pangyo')) {
+        else if (item.url.includes('suwon-station') || item.url.includes('suwon-paldalmun') || item.url.includes('suwon-ingye')) {
           item.priority = 0.8;
           item.changefreq = 'monthly';
         }
