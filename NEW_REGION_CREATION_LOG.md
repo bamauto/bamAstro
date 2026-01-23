@@ -2055,5 +2055,200 @@ git push origin main
 | 분당 | bamastro-bundang | apps/bundang | bundang-karaoke.com | ✅ 운영중 |
 | 수원 | bamastro-suwon | apps/suwon | public-karaoke.com | ✅ 운영중 |
 | 동탄 | bamastro-dongtan | apps/dongtan | dongtan-karaoke.com | ✅ 운영중 |
-| 강남 | bamastro-gangnam | apps/gangnam | high-karaoke.com | ⏳ 설정 필요 |
+| 강남 | bamastro-gangnam | apps/gangnam | high-karaoke.com | ✅ 배포완료 |
+
+---
+
+## Phase 16: Google Search Console / Naver 웹마스터 등록
+
+> 검색 엔진에 사이트를 등록하고 색인을 요청하는 가이드입니다.
+> SEO의 필수 단계로, 배포 완료 후 즉시 진행해야 합니다.
+
+### 16.1 Google Search Console 등록
+
+#### 16.1.1 접속 및 속성 추가
+
+1. https://search.google.com/search-console 접속
+2. 좌측 상단 속성 선택기 클릭
+3. **"속성 추가"** 클릭
+
+#### 16.1.2 속성 유형 선택
+
+| 유형 | 설명 | 권장 |
+|------|------|------|
+| 도메인 | 모든 서브도메인 포함 (DNS 확인 필요) | ⭐ 권장 |
+| URL 프리픽스 | 특정 URL만 (HTML 태그 확인 가능) | 간편 |
+
+**URL 프리픽스 방식 (권장):**
+- URL 입력: `https://high-karaoke.com`
+
+#### 16.1.3 소유권 확인 방법
+
+**방법 1: HTML 태그 (가장 간편)**
+1. "HTML 태그" 선택
+2. 메타 태그 복사:
+   ```html
+   <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE" />
+   ```
+3. `content` 값만 복사
+4. `apps/gangnam/src/config/region.ts` 수정:
+   ```typescript
+   seo: {
+       googleVerification: 'YOUR_VERIFICATION_CODE',  // 여기에 붙여넣기
+   }
+   ```
+5. 배포 후 "확인" 클릭
+
+**방법 2: HTML 파일 업로드**
+1. `googleXXXXXXXX.html` 파일 다운로드
+2. `apps/gangnam/public/` 폴더에 복사
+3. 배포 후 "확인" 클릭
+
+**방법 3: DNS 레코드 (도메인 속성)**
+1. TXT 레코드 값 복사
+2. DNS 설정에 추가:
+   ```
+   Type: TXT
+   Name: @
+   Value: google-site-verification=XXXXX
+   TTL: 3600
+   ```
+
+#### 16.1.4 사이트맵 제출
+
+1. Search Console → **색인** → **Sitemaps**
+2. 새 사이트맵 추가:
+   ```
+   sitemap-index.xml
+   ```
+3. **제출** 클릭
+
+**제출할 URL:**
+```
+https://high-karaoke.com/sitemap-index.xml
+```
+
+#### 16.1.5 색인 생성 요청 (선택)
+
+주요 페이지 수동 색인 요청:
+1. Search Console → **URL 검사**
+2. URL 입력: `https://high-karaoke.com/`
+3. **색인 생성 요청** 클릭
+
+**우선 색인 요청 페이지:**
+- `/` (홈페이지)
+- `/gangnam-karaoke-guide` (가라오케 가이드)
+- `/gangnam-highpublic-guide` (하이퍼블릭 가이드)
+- `/gangnam-station-guide` (강남역 가이드)
+
+---
+
+### 16.2 Naver Search Advisor 등록
+
+#### 16.2.1 접속 및 사이트 등록
+
+1. https://searchadvisor.naver.com 접속
+2. 네이버 로그인
+3. **웹마스터 도구** → **사이트 관리**
+4. **사이트 추가** 클릭
+5. URL 입력: `https://high-karaoke.com`
+
+#### 16.2.2 소유권 확인
+
+**방법 1: HTML 태그 (권장)**
+1. "HTML 태그" 선택
+2. 메타 태그 복사:
+   ```html
+   <meta name="naver-site-verification" content="YOUR_NAVER_CODE" />
+   ```
+3. `content` 값만 복사
+4. `apps/gangnam/src/config/region.ts` 수정:
+   ```typescript
+   seo: {
+       naverVerification: 'YOUR_NAVER_CODE',  // 여기에 붙여넣기
+   }
+   ```
+5. 배포 후 "확인" 클릭
+
+#### 16.2.3 사이트맵 제출
+
+1. Search Advisor → **요청** → **사이트맵 제출**
+2. URL 입력:
+   ```
+   https://high-karaoke.com/sitemap-index.xml
+   ```
+3. **확인** 클릭
+
+#### 16.2.4 RSS 제출 (블로그용)
+
+블로그가 있는 경우:
+1. **요청** → **RSS 제출**
+2. RSS URL 입력 (있는 경우)
+
+---
+
+### 16.3 region.ts 설정 예시
+
+```typescript
+// apps/gangnam/src/config/region.ts
+seo: {
+    mainKeyword: '강남 유흥',
+    // ... 기타 설정 ...
+
+    // 검색 엔진 인증 코드 (Search Console에서 발급)
+    googleVerification: 'GOOGLE_VERIFICATION_CODE_HERE',
+    naverVerification: 'NAVER_VERIFICATION_CODE_HERE',
+}
+```
+
+---
+
+### 16.4 등록 후 확인 사항
+
+#### 16.4.1 Google Search Console 체크리스트
+
+- [ ] 속성 추가 완료
+- [ ] 소유권 확인 완료
+- [ ] 사이트맵 제출 완료 (상태: 성공)
+- [ ] 색인 생성 요청 (주요 페이지)
+- [ ] Core Web Vitals 확인
+
+#### 16.4.2 Naver Search Advisor 체크리스트
+
+- [ ] 사이트 등록 완료
+- [ ] 소유권 확인 완료
+- [ ] 사이트맵 제출 완료
+- [ ] 진단 → 사이트 최적화 확인
+
+---
+
+### 16.5 색인 현황 모니터링
+
+#### 16.5.1 Google
+
+- **색인 현황**: Search Console → 색인 → 페이지
+- **검색 노출**: Search Console → 실적
+- **예상 색인 시간**: 1-7일 (신규 사이트)
+
+#### 16.5.2 Naver
+
+- **색인 현황**: Search Advisor → 현황 → 콘텐츠 현황
+- **검색 노출**: site:high-karaoke.com 검색
+- **예상 색인 시간**: 3-14일 (신규 사이트)
+
+---
+
+### 16.6 강남 (gangnam) 검색 엔진 등록 현황
+
+| 검색 엔진 | 등록 URL | 사이트맵 | 상태 |
+|----------|----------|----------|------|
+| Google Search Console | https://high-karaoke.com | sitemap-index.xml | ⏳ 등록 필요 |
+| Naver Search Advisor | https://high-karaoke.com | sitemap-index.xml | ⏳ 등록 필요 |
+| Bing Webmaster Tools | https://high-karaoke.com | sitemap-index.xml | ⏳ 등록 필요 |
+
+**인증 코드 설정 위치:**
+```
+apps/gangnam/src/config/region.ts → seo.googleVerification
+apps/gangnam/src/config/region.ts → seo.naverVerification
+```
 
