@@ -1,26 +1,54 @@
-# bamAstro SEO Robots.txt
-# https://public-karaoke.com
+# ====================================
+# SEO Robots.txt - public-karaoke.com
+# 수원 가라오케/유흥 가이드 사이트
+# ====================================
+# Last Updated: 2026-01-23
+# 최적화: 글로벌 + 한국 검색엔진
 
+# Default rules for all crawlers
 User-agent: *
 Allow: /
 
-# Disallow admin/internal pages
+# Disallow sensitive pages
 Disallow: /api/
-Disallow: /_astro/
 Disallow: /404
+Disallow: /admin/
+Disallow: /internal/
 
-# Allow all crawlers to access main content
+# Allow static assets (Astro builds)
+Allow: /_astro/*.css$
+Allow: /_astro/*.js$
+Allow: /images/
+Allow: /fonts/
+
+# ====================================
+# Google-specific rules
+# ====================================
 User-agent: Googlebot
 Allow: /
 
-User-agent: Bingbot
-Allow: /
-
+# ====================================
+# Naver (Korean Search Engine)
+# ====================================
 User-agent: Yeti
 Allow: /
 
-# Sitemap locations
-Sitemap: https://public-karaoke.com/sitemap-index.xml
+User-agent: Yeti-JSC
+Allow: /
 
-# Crawl-delay for polite crawling (optional)
-# Crawl-delay: 1
+# ====================================
+# Daum (Korean Search Engine)
+# ====================================
+User-agent: Daumoa
+Allow: /
+
+# ====================================
+# Bing
+# ====================================
+User-agent: Bingbot
+Allow: /
+
+# ====================================
+# Sitemaps
+# ====================================
+Sitemap: https://public-karaoke.com/sitemap-index.xml
