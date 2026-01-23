@@ -1,26 +1,82 @@
 ---
 import { Crown, MapPin, Zap, Users } from 'lucide-astro';
 
+interface Props {
+    regionName?: string;
+    regionId?: string;
+    stations?: string[];
+    landmarks?: string[];
+}
+
+const {
+    regionName = '분당',
+    regionId = 'bundang',
+    stations = ['서현역', '야탑역', '판교역'],
+    landmarks = ['서현역 로데오거리', '야탑역 먹자골목', '판교테크노밸리']
+} = Astro.props;
+
+const stationText = stations.slice(0, 3).join('·');
+const station1 = stations[0] || '서현역';
+const station2 = stations[1] || '야탑역';
+
+// 지역별 특화 콘텐츠
+const regionContent: Record<string, {
+    cityTitle: string;
+    cityDesc: string;
+    transitTitle: string;
+    transitDesc: string;
+    industryTitle: string;
+    industryDesc: string;
+}> = {
+    bundang: {
+        cityTitle: "판교테크노밸리 100만 IT도시",
+        cityDesc: `경기 남부 IT 중심지 ${regionName}은 <strong class="text-purple-400">${stationText}</strong> 일대 상권이 촘촘하게 발달해 있습니다. <strong class="text-white">취향과 예산에 맞는 선택지</strong>가 풍부합니다.`,
+        transitTitle: `${station1}·${station2} 환승 허브`,
+        transitDesc: `<strong class="text-purple-400">분당선·신분당선</strong>이 만나는 ${station1}은 경기남부 대표 교통 허브입니다. 광역 이동이 편해 <strong class="text-white">야간 동선 설계</strong>가 수월합니다.`,
+        industryTitle: "네이버·카카오 배후도시",
+        industryDesc: `<strong class="text-purple-400">판교테크노밸리</strong> 등 대형 IT 기업이 밀집해 고소득 직장인 수요가 집중됩니다. <strong class="text-white">조용한 비즈니스 접대</strong>에 맞춘 프리미엄 시장이 형성되어 있습니다.`,
+    },
+    suwon: {
+        cityTitle: "경기남부 130만 중심도시",
+        cityDesc: `경기남부 중심도시 ${regionName}은 <strong class="text-purple-400">${stationText}</strong> 일대 상권이 촘촘하게 발달해 있습니다. <strong class="text-white">취향과 예산에 맞는 선택지</strong>가 풍부합니다.`,
+        transitTitle: `${station1} 5개 노선 환승`,
+        transitDesc: `<strong class="text-purple-400">1호선·분당선·수인선·KTX·SRT</strong>가 만나는 ${station1}은 경기남부 대표 교통 허브입니다. 광역 이동이 편해 <strong class="text-white">야간 동선 설계</strong>가 수월합니다.`,
+        industryTitle: "삼성전자 배후도시",
+        industryDesc: `<strong class="text-purple-400">삼성디지털시티</strong> 등 대형 사업장이 있어 고소득 직장인 수요가 집중됩니다. <strong class="text-white">조용한 비즈니스 접대</strong>에 맞춘 프리미엄 시장이 형성되어 있습니다.`,
+    },
+    dongtan: {
+        cityTitle: "동탄신도시 50만 신흥상권",
+        cityDesc: `신도시 ${regionName}은 <strong class="text-purple-400">${stationText}</strong> 일대 상권이 빠르게 성장하고 있습니다. <strong class="text-white">취향과 예산에 맞는 선택지</strong>가 풍부합니다.`,
+        transitTitle: `${station1}·${station2} 환승 허브`,
+        transitDesc: `<strong class="text-purple-400">SRT·GTX-A</strong>가 만나는 ${station1}은 수도권 광역 교통 허브입니다. 광역 이동이 편해 <strong class="text-white">야간 동선 설계</strong>가 수월합니다.`,
+        industryTitle: "삼성·현대 배후신도시",
+        industryDesc: `<strong class="text-purple-400">삼성전자·현대기아차</strong> 등 대형 사업장이 있어 고소득 직장인 수요가 집중됩니다. <strong class="text-white">조용한 비즈니스 접대</strong>에 맞춘 프리미엄 시장이 형성되어 있습니다.`,
+    },
+};
+
+// 해당 지역 콘텐츠 가져오기 (없으면 기본값)
+const content = regionContent[regionId] || regionContent.bundang;
+
 const cards = [
     {
         Icon: Crown,
-        title: "경기남부 130만 중심도시",
-        desc: "경기남부 중심도시 수원은 <strong class=\"text-purple-400\">수원역·수원시청역·팔달문</strong> 일대 상권이 촘촘하게 발달해 있습니다. <strong class=\"text-white\">취향과 예산에 맞는 선택지</strong>가 풍부합니다."
+        title: content.cityTitle,
+        desc: content.cityDesc,
     },
     {
         Icon: MapPin,
-        title: "수원역 5개 노선 환승",
-        desc: "<strong class=\"text-purple-400\">광역 노선</strong>이 만나는 수원역은 경기남부 대표 교통 허브입니다. 광역 이동이 편해 <strong class=\"text-white\">야간 동선 설계</strong>가 수월합니다."
+        title: content.transitTitle,
+        desc: content.transitDesc,
     },
     {
         Icon: Zap,
-        title: "삼성전자 배후도시",
-        desc: "<strong class=\"text-purple-400\">삼성디지털시티</strong> 등 대형 사업장이 있어 고소득 직장인 수요가 집중됩니다. <strong class=\"text-white\">조용한 비즈니스 접대</strong>에 맞춘 프리미엄 시장이 형성되어 있습니다."
+        title: content.industryTitle,
+        desc: content.industryDesc,
     },
     {
         Icon: Users,
         title: "예산별 맞춤 추천",
-        desc: "<strong class=\"text-purple-400\">수원역 실속형</strong>부터 <strong class=\"text-purple-400\">수원시청역 프리미엄</strong>까지 다양한 선택지를 제안합니다."
+        desc: `<strong class="text-purple-400">${station2} 실속형</strong>부터 <strong class="text-purple-400">${station1} 프리미엄</strong>까지 다양한 선택지를 제안합니다.`,
     }
 ];
 ---
@@ -29,7 +85,7 @@ const cards = [
     <div class="container mx-auto px-4">
         <div class="text-center mb-16 relative">
             <span class="text-purple-400 font-bold tracking-[0.2em] text-sm md:text-base uppercase mb-3 animate-fade-in-up block">지역 특화 분석</span>
-            <h2 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 relative z-10 animate-fade-in-up delay-100 drop-shadow-sm">왜 수원인가?</h2>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 relative z-10 animate-fade-in-up delay-100 drop-shadow-sm">왜 {regionName}인가?</h2>
             <div class="w-1 h-12 bg-gradient-to-b from-purple-500 to-transparent mx-auto mt-6"></div>
         </div>
 

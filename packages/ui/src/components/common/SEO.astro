@@ -36,17 +36,25 @@ const {
   alternateRegions = [],
 } = Astro.props;
 
-const fullTitle = `${title} | ${region.seo.titleSuffix}`;
+const fullTitle = title;
 const fullOgImage = `https://${region.domain}${ogImage}`;
 const currentPath = Astro.url.pathname;
 ---
+
+<!-- Search Engine Verification -->
+{region.seo.naverVerification && region.seo.naverVerification !== 'YOUR_NAVER_VERIFICATION_CODE' && (
+  <meta name="naver-site-verification" content={region.seo.naverVerification} />
+)}
+{region.seo.googleVerification && region.seo.googleVerification !== 'YOUR_GOOGLE_VERIFICATION_CODE' && (
+  <meta name="google-site-verification" content={region.seo.googleVerification} />
+)}
 
 <!-- Primary Meta Tags -->
 <title>{fullTitle}</title>
 <meta name="title" content={fullTitle} />
 <meta name="description" content={description} />
 <meta name="keywords" content={keywords.join(', ')} />
-<meta name="author" content={region.seo.titleSuffix} />
+<meta name="author" content="서우실장" />
 <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
 <link rel="canonical" href={canonical} />
 
@@ -59,7 +67,7 @@ const currentPath = Astro.url.pathname;
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:locale" content="ko_KR" />
-<meta property="og:site_name" content={`${region.name} ${region.seo.titleSuffix}`} />
+<meta property="og:site_name" content={`${region.name} 유흥 가이드`} />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />

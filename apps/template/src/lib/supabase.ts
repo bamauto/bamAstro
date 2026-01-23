@@ -23,12 +23,14 @@ export interface BlogPost {
   updated_at: string;
 }
 
-// Fetch all published blog posts
+// Fetch all published blog posts (with scheduled filter)
 export async function getBlogPosts(): Promise<BlogPost[]> {
+  const now = new Date().toISOString();
   const { data, error } = await supabase
     .from('bamastro_blog_posts')
     .select('*')
     .eq('status', 'published')
+    .lte('published_at', now)
     .order('published_at', { ascending: false });
 
   if (error) {
@@ -39,13 +41,69 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
   return data || [];
 }
 
-// Fetch single blog post by slug
+// Pagination result type
+export interface PaginatedResult<T> {
+  data: T[];
+  count: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+// Fetch paginated blog posts (with scheduled filter)
+export async function getBlogPostsPaginated(
+  page = 1,
+  pageSize = 9
+): Promise<PaginatedResult<BlogPost>> {
+  const now = new Date().toISOString();
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  // Get total count
+  const { count, error: countError } = await supabase
+    .from('bamastro_blog_posts')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'published')
+    .lte('published_at', now);
+
+  if (countError) {
+    console.error('Error counting blog posts:', countError);
+    return { data: [], count: 0, page, pageSize, totalPages: 0 };
+  }
+
+  // Get paginated data
+  const { data, error } = await supabase
+    .from('bamastro_blog_posts')
+    .select('*')
+    .eq('status', 'published')
+    .lte('published_at', now)
+    .order('published_at', { ascending: false })
+    .range(from, to);
+
+  if (error) {
+    console.error('Error fetching paginated blog posts:', error);
+    return { data: [], count: 0, page, pageSize, totalPages: 0 };
+  }
+
+  const totalCount = count || 0;
+  return {
+    data: data || [],
+    count: totalCount,
+    page,
+    pageSize,
+    totalPages: Math.ceil(totalCount / pageSize),
+  };
+}
+
+// Fetch single blog post by slug (with scheduled filter)
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  const now = new Date().toISOString();
   const { data, error } = await supabase
     .from('bamastro_blog_posts')
     .select('*')
     .eq('slug', slug)
     .eq('status', 'published')
+    .lte('published_at', now)
     .single();
 
   if (error) {
@@ -56,13 +114,16 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
   return data;
 }
 
-// Fetch featured blog post
+// Fetch featured blog post (with scheduled filter)
 export async function getFeaturedPost(): Promise<BlogPost | null> {
+  const now = new Date().toISOString();
   const { data, error } = await supabase
     .from('bamastro_blog_posts')
     .select('*')
     .eq('status', 'published')
     .eq('featured', true)
+    .lte('published_at', now)
+    .order('published_at', { ascending: false })
     .limit(1)
     .single();
 

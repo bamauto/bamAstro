@@ -33,9 +33,11 @@ export interface RegionConfig {
 
     // SEO
     seo: {
-        titleSuffix: string;         // 서우실장
-        mainKeywords: string[];      // ['분당 가라오케', '분당 하이퍼블릭', ...]
+        mainKeyword: string;         // 분당 유흥
+        mainKeywords: string[];      // ['분당 유흥', '분당 하이퍼블릭', ...]
         description: string;         // 메인 설명
+        naverVerification?: string;  // 네이버 웹마스터 도구 인증 코드
+        googleVerification?: string; // 구글 서치 콘솔 인증 코드
     };
 
     // 가격 정보
@@ -53,6 +55,14 @@ export interface RegionConfig {
 
     // 업소 타입 (지역마다 다를 수 있음)
     venueTypes: VenueType[];
+
+    // 지역별 가이드 (선택)
+    areaGuides?: AreaGuide[];
+}
+
+export interface AreaGuide {
+    slug: string;       // bundang-seohyeon-guide
+    name: string;       // 서현역 가이드
 }
 
 export interface VenueType {
@@ -97,12 +107,19 @@ export const region: RegionConfig = {
     nearbyStations: ['서현역', '야탑역', '미금역', '판교역'],
 
     seo: {
-        titleSuffix: '서우실장',
+        mainKeyword: '분당 유흥',
         mainKeywords: [
-            '분당 가라오케', '분당 하이퍼블릭', '분당 셔츠룸',
-            '분당 호빠', '분당 기모노룸', '분당 룸살롱'
+            '분당 유흥',
+            '분당 하이퍼블릭',
+            '분당 가라오케',
+            '분당 셔츠룸',
+            '분당 기모노룸',
+            '분당 룸살롱',
+            '분당 호빠'
         ],
-        description: '분당 가라오케·하이퍼블릭 메인 가이드. 서현역 로데오거리·야탑역 먹자골목 중심 상권에서 판교·서현 직장인 맞춤 코스를 안내합니다.',
+        description: '분당 유흥 가이드 | 서현역 로데오거리·야탑역 먹자골목 중심 하이퍼블릭·가라오케·셔츠룸 예약. 판교·서현 직장인 맞춤 코스 안내.',
+        naverVerification: 'YOUR_NAVER_VERIFICATION_CODE',  // 네이버 웹마스터 도구에서 발급받은 코드로 교체
+        googleVerification: 'YOUR_GOOGLE_VERIFICATION_CODE', // 구글 서치 콘솔에서 발급받은 코드로 교체
     },
 
     pricing: {
@@ -177,5 +194,11 @@ export const region: RegionConfig = {
             minPrice: 150000,
             keywords: ['분당 호빠', '서현 호스트바'],
         },
+    ],
+
+    areaGuides: [
+        { slug: 'bundang-seohyeon-guide', name: '서현역 가이드' },
+        { slug: 'bundang-yatap-guide', name: '야탑역 가이드' },
+        { slug: 'bundang-pangyo-guide', name: '판교역 가이드' },
     ],
 };

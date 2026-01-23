@@ -24,9 +24,11 @@ export interface RegionConfig {
     landmarks: string[];
     nearbyStations: string[];
     seo: {
-        titleSuffix: string;
+        mainKeyword: string;
         mainKeywords: string[];
         description: string;
+        naverVerification?: string;
+        googleVerification?: string;
     };
     pricing: {
         minRoomCharge: number;
@@ -38,6 +40,12 @@ export interface RegionConfig {
         close: string;
     };
     venueTypes: VenueType[];
+    areaGuides?: AreaGuide[];
+}
+
+export interface AreaGuide {
+    slug: string;
+    name: string;
 }
 
 export interface VenueType {

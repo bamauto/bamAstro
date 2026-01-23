@@ -1,5 +1,5 @@
 ---
-import { PageLayout, LocalBusinessSchema, VenueCard, TableOfContents, RelatedServices } from '@bamastro/ui';
+import { PageLayout, LocalBusinessSchema, BreadcrumbSchema, HowToSchema, FAQPageSchema, VenueCard, TableOfContents, RelatedServices } from '@bamastro/ui';
 import { region } from '@/config/region';
 import { Sparkles, Mic2, Users, Star, HelpCircle, Phone, CheckCircle, ChevronRight, GlassWater } from 'lucide-astro';
 
@@ -17,30 +17,45 @@ if (!venueType) {
 }
 
 const seoProps = {
-  title: `${region.name} 가라오케 예약·추천 | 가격·시스템 완벽 가이드`,
-  description: `${region.name} 가라오케 추천 가이드. 수원역·팔달문 중심 파티/모임 룸, 도심 비즈니스 방문객 회식 맞춤. 주대 18만원 이상, TC 10만원 이상, 상세 문의.`,
-  keywords: [`${region.name} 가라오케`, `${region.name} 가라오케 예약`, `${region.name} 가라오케 가격`, `${region.name} 하이퍼블릭`],
+  title: `${region.name} 프리미엄 가라오케(노래방) 완벽 가이드 | 가격·음향·추천`,
+  description: `${region.name} 프리미엄 가라오케 완벽 가이드. ${region.nearbyStations.slice(0,2).join('·')} 중심 고급 시설, 하이엔드 음향. 회식·데이트·파티 추천, 가격, 예약, 팁 상세 안내.`,
+  keywords: [
+    `${region.name} 가라오케`,
+    `${region.name} 프리미엄 노래방`,
+    `${region.name} 가라오케 예약`,
+    `${region.name} 가라오케 가격`,
+    `${region.name} 가라오케 음향`
+  ],
 };
+
+// HowTo Schema steps - 가라오케 이용 흐름
+const usageSteps = [
+  { name: "예약", text: "원하는 시간, 인원, 주류 종류(양주/맥주) 및 방문 목적을 전달합니다." },
+  { name: "룸 배정", text: "예약 시간에 맞춰 원하는 컨셉의 룸이 준비됩니다." },
+  { name: "기본 세팅", text: "선택한 양주/맥주 SET 음료, 안주, 과일이 제공됩니다." },
+  { name: "노래 및 파티", text: "기본 2-3시간의 노래 시간이 제공됩니다." },
+  { name: "연장 서빙", text: "즐거우면 추가 시간 연장이 가능합니다." }
+];
 
 const venues = [
     {
         id: 'k-1',
         name: `${region.name} 프리미엄 가라오케`,
         type: 'Mega Party Room',
-        location: '수원역 인근',
+        location: `${region.nearbyStations[0]} 인근`,
         price: '주대 18만원 이상, TC 10만원 이상',
-        desc: '수원역에서 접근 좋은 파티형 가라오케. 도심 비즈니스 방문객 회식/모임에 맞춘 대형 룸.',
-        features: ['대형 룸', '음향 특화', '수원역 접근', '회식 추천'],
+        desc: `${region.nearbyStations[0]}에서 접근 좋은 파티형 가라오케. 도심 비즈니스 방문객 회식/모임에 맞춤 대형 룸.`,
+        features: ['대형 룸', '음향 특화', `${region.nearbyStations[0]} 접근`, '회식 추천'],
         img: '/images/venues/karaoke_5.webp',
     },
     {
         id: 'k-2',
-        name: '수원시청역 럭셔리 가라오케',
+        name: `${region.nearbyStations[1]} 럭셔리 가라오케`,
         type: 'Luxury Lounge',
-        location: '수원시청역 인근',
+        location: `${region.nearbyStations[1]} 인근`,
         price: '주대 18만원 이상, TC 10만원 이상',
-        desc: '수원시청역 라운지 톤 가라오케. 음향 퀄리티와 조용한 대화 모두 만족.',
-        features: ['라운지 무드', '고급 사운드', '수원시청역 중심', '프라이빗'],
+        desc: `${region.nearbyStations[1]} 라운지 톤 가라오케. 음향 퀄리티와 조용한 대화 모두 만족.`,
+        features: ['라운지 무드', '고급 사운드', `${region.nearbyStations[1]} 중심`, '프라이빗'],
         img: '/images/venues/karaoke_6.webp',
     }
 ];
@@ -48,11 +63,11 @@ const venues = [
 const faqList = [
     {
         question: `${region.name} 가라오케 1인 방문도 가능한가요?`,
-        answer: "네, 가능합니다. 수원 상권은 도심 비즈니스 방문객 이용이 많아 도시형 응대로 1:1 시작도 부담 없이 안내합니다."
+        answer: `네, 가능합니다. ${region.name} 상권은 도심 비즈니스 방문객 이용이 많아 도시형 응대로 1:1 시작도 부담 없이 안내합니다.`
     },
     {
         question: `${region.name} 가라오케 픽업은 어디까지 지원되나요?`,
-        answer: "픽업은 수원역, 수원시청역, 팔달문, 행궁동 중심으로 운영됩니다. 정확한 동선은 예약 시 조율해 드립니다."
+        answer: `픽업은 ${region.nearbyStations.slice(0,3).join(', ')} 중심으로 운영됩니다. 정확한 동선은 예약 시 조율해 드립니다.`
     },
     {
         question: `${region.name} 가라오케 주대/TC 기준이 궁금해요.`,
@@ -61,7 +76,7 @@ const faqList = [
 ];
 
 const sections = [
-    { id: "features", title: "1. 수원 가라오케 특징" },
+    { id: "features", title: `1. ${region.name} 가라오케 특징` },
     { id: "recommendation", title: "2. 추천 업소 TOP 6" },
     { id: "pricing", title: "3. 이용 가격 및 시스템" },
     { id: "faq", title: "4. 이용 꿀팁 및 FAQ" }
@@ -70,21 +85,28 @@ const sections = [
 
 <PageLayout {...seoProps} region={region}>
     <LocalBusinessSchema region={region} />
-    
+    <BreadcrumbSchema region={region} />
+    <HowToSchema
+        name={`${region.name} 가라오케 이용 방법`}
+        description="5단계로 완료하는 가라오케 이용 가이드. 예약부터 연장까지 완벽 안내."
+        steps={usageSteps}
+    />
+    <FAQPageSchema items={faqList} />
+
     <div class="pt-24 md:pt-32 min-h-screen bg-transparent">
         <div class="container mx-auto px-4 pb-12 max-w-6xl">
             <!-- Section Title -->
             <div class="text-center mb-16 relative">
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl"></div>
                 <span class="text-amber-400 font-bold tracking-[0.2em] text-sm md:text-base uppercase mb-3 animate-fade-in-up block">비교와 선택</span>
-                <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 relative z-10 animate-fade-in-up delay-100 drop-shadow-sm">{region.name} 가라오케 101: 용도별 선택 가이드</h1>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 relative z-10 animate-fade-in-up delay-100 drop-shadow-sm">{region.name} 프리미엄 가라오케(노래방) 완벽 가이드</h1>
                 <div class="w-1 h-12 bg-gradient-to-b from-amber-500 to-transparent mx-auto mt-6"></div>
             </div>
 
             <!-- Intro Text -->
             <div class="mb-20 text-center max-w-4xl mx-auto animate-fade-in-up delay-200">
                 <p class="text-xl text-slate-300 leading-relaxed font-light">
-                    {region.name} 가라오케는 수원역·팔달문 중심 파티룸 위주 구성입니다.<br />
+                    {region.name} 가라오케는 {region.nearbyStations.slice(0,2).join('·')} 중심 파티룸 위주 구성입니다.<br />
                     회식/모임에 맞춘 음향 세팅과 유연한 룸 타입을 안내합니다.<br />
                     주대 18만원 이상·TC 10만원 이상 기준이며 상세 견적은 문의 부탁드립니다.
                 </p>
@@ -92,19 +114,16 @@ const sections = [
 
             <TableOfContents sections={sections} />
 
-            <!-- 1. Definition -->
+            <!-- 1. Definition - Featured Snippet Optimized -->
             <div id="features" class="mb-12 bg-slate-900/30 p-8 rounded-2xl border border-slate-800/50 backdrop-blur-sm hover:border-purple-500/20 transition-colors animate-fade-in-up delay-300">
                 <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <div class="w-1.5 h-8 bg-purple-500 rounded-full"></div>
-                    1. {region.name} 가라오케의 특징
+                    1. {region.name} 가라오케란?
                 </h2>
                 <div class="text-slate-300 leading-relaxed text-lg font-light space-y-4">
+                    <!-- Snippet-optimized definition (40-60 words) -->
                     <p>
-                        {region.name} 가라오케는 단순한 노래방을 넘어선 <strong>'토탈 엔터테인먼트 공간'</strong>을 지향합니다. 강남의 고급 가라오케 시스템을 그대로 도입하여,
-                        웨이터의 격식 있는 서빙과 호텔 셰프 수준의 고급 안주, 그리고 무엇보다 <strong>콘서트장을 방불케 하는 하이엔드 음향 시설</strong>을 갖추고 있습니다.
-                    </p>
-                    <p>
-                        비즈니스 접대로도 손색없는 고급스러운 인테리어 룸부터, 2030 세대를 위한 힙한 감성의 파티룸까지 다양한 컨셉의 룸을 보유하고 있어 방문 목적에 맞게 선택하실 수 있습니다.
+                        <strong>{region.name} 가라오케는 최신 음향 시설과 럭셔리 룸에서 즐기는 토탈 엔터테인먼트 공간입니다.</strong> 강남식 고급 음향 시스템과 호텔 셰프 수준의 고급 안주, 그리고 다양한 컨셉의 룸(비즈니스 라운지형·파티형)을 갖추고 있어 파티, 회식, 비즈니스 접대 모두에 활용됩니다.
                     </p>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                         <div class="bg-slate-800 p-4 rounded-xl text-center border border-slate-700">
@@ -126,6 +145,21 @@ const sections = [
                 </div>
             </div>
 
+            <!-- 1-1. 가라오케 이용 흐름 - Step Snippet -->
+            <div class="mb-12 bg-slate-900/30 p-8 rounded-2xl border border-slate-800/50 backdrop-blur-sm hover:border-purple-500/20 transition-colors">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                    <div class="w-1.5 h-6 bg-purple-500 rounded-full"></div>
+                    가라오케 이용 흐름 (5단계)
+                </h3>
+                <ol class="list-decimal pl-6 space-y-3 text-slate-300">
+                    <li><strong>예약</strong> - 시간, 인원, 주류 종류(양주/맥주) 및 목적 전달</li>
+                    <li><strong>룸 배정</strong> - 예약 시간에 맞춰 원하는 컨셉의 룸 준비</li>
+                    <li><strong>기본 세팅</strong> - 선택한 양주/맥주 SET 음료, 안주, 과일 제공</li>
+                    <li><strong>노래 및 파티</strong> - 기본 2-3시간의 노래 시간 제공</li>
+                    <li><strong>연장 서빙</strong> - 즐거우면 추가 시간 연장 가능</li>
+                </ol>
+            </div>
+
             <!-- 2. Recommendations -->
             <div id="recommendation" class="mb-24 animate-fade-in-up delay-300">
                 <div class="flex items-center gap-3 mb-8">
@@ -144,7 +178,7 @@ const sections = [
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         {[1, 2, 3, 4].map((i) => (
                             <div class="aspect-[3/4] rounded-2xl overflow-hidden border border-slate-800 hover:border-purple-500/50 transition-all duration-300 group">
-                                <img src={`/images/venues/karaoke_${i}.webp`} alt={`${region.name} 가라오케 이미지 ${i}`} loading="lazy" width="300" height="400"
+                                <img src={`/images/venues/karaoke_${i}.webp`} alt={`${region.name} 프리미엄 가라오케 노래방 럭셔리 룸 음향 시설 ${i}`} loading="lazy" width="300" height="400"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                             </div>
                         ))}
@@ -161,7 +195,7 @@ const sections = [
                 <div class="text-slate-300 leading-relaxed text-lg font-light space-y-4">
                      <p>
                         {region.name} 가라오케는 투명한 정찰제로 운영됩니다.
-                        <strong>양주 SET</strong> 문의가 많으며, 수원역·수원시청 라인 기준으로 인원/시간에 따라 안내됩니다.
+                        <strong>양주 SET</strong> 문의가 많으며, {region.nearbyStations.slice(0,2).join('·')} 라인 기준으로 인원/시간에 따라 안내됩니다.
                     </p>
 
                     <h4 class="text-xl font-bold text-white mt-8 mb-4">A. 기본 주대 가이드</h4>
@@ -195,7 +229,41 @@ const sections = [
                     </div>
                     <p class="text-xs text-slate-500 mt-2">* 위 가격은 평균적인 시세이며, 업소 상황 및 이벤트에 따라 변동될 수 있습니다. 정확한 견적은 전화 문의 바랍니다.</p>
 
-                    <h4 class="text-xl font-bold text-white mt-8 mb-4">B. 운영 정책</h4>
+                    <h4 class="text-xl font-bold text-white mt-8 mb-4">B. 룸 타입별 추천</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse mt-2">
+                            <thead>
+                                <tr class="border-b border-slate-700 text-purple-400">
+                                    <th class="py-3 px-4">룸 타입</th>
+                                    <th class="py-3 px-4">특징</th>
+                                    <th class="py-3 px-4">추천 인원</th>
+                                    <th class="py-3 px-4">분위기</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr class="border-b border-slate-800">
+                                    <td class="py-3 px-4 font-bold text-white">럭셔리 라운지</td>
+                                    <td class="py-3 px-4">고급스러운 인테리어, 호텔급 서빙</td>
+                                    <td class="py-3 px-4">2-4명</td>
+                                    <td class="py-3 px-4">조용하고 격식</td>
+                                </tr>
+                                <tr class="border-b border-slate-800">
+                                    <td class="py-3 px-4 font-bold text-white">파티룸</td>
+                                    <td class="py-3 px-4">대형 룸, 신나는 음향, 춤 공간</td>
+                                    <td class="py-3 px-4">5-10명+</td>
+                                    <td class="py-3 px-4">활기차고 신남</td>
+                                </tr>
+                                <tr class="border-b border-slate-800">
+                                    <td class="py-3 px-4 font-bold text-white">비즈니스 라운지</td>
+                                    <td class="py-3 px-4">조용한 대화, 회의용 세팅</td>
+                                    <td class="py-3 px-4">3-6명</td>
+                                    <td class="py-3 px-4">프로페셔널</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4 class="text-xl font-bold text-white mt-8 mb-4">C. 운영 정책</h4>
                     <ul class="list-disc pl-5 space-y-2 marker:text-purple-500">
                         <li><strong>영업 시간</strong>: 365일 연중무휴 (보통 저녁 6시 ~ 다음날 점심까지 운영)</li>
                         <li><strong>노래 시간</strong>: 기본 2~3시간 제공, 뒤에 대기 손님이 없을 경우 서비스 시간 팍팍 드립니다.</li>

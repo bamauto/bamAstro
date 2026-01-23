@@ -9,9 +9,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/vercel": "^9.0.4",
     "@bamastro/ui": "workspace:*",
+    "@supabase/supabase-js": "^2.91.0",
     "astro": "^5.16.13",
-    "lucide-astro": "^0.556.0"
+    "lucide-astro": "^0.556.0",
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@astrojs/sitemap": "^3.7.0",
