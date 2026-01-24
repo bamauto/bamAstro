@@ -1,0 +1,36 @@
+---
+import { PageLayout, LocalBusinessSchema, OrganizationSchema, HeroSection, FeaturesSection, GallerySection, IntroSection, AnalysisSection, HotEventSection, BlogSection, VenuePreviewSection } from '@bamastro/ui';
+import { region } from '@/config/region';
+import { getBlogPosts } from '@/lib/supabase';
+
+const seoProps = {
+  title: `${region.name} 가라오케·유흥 가이드 | 하이퍼블릭·셔츠룸 예약`,
+  description: `${region.nearbyStations.slice(0,2).join('·')} 최고급 가라오케·하이퍼블릭 완벽 가이드. 2026년 최신 가격, 프리미엄 룸, 매니저 추천 시스템. 회식·데이트·비즈니스 접대 전문. ${region.localContent?.pricingNote || '합리적 가격대'}. 24시간 무료 상담.`,
+  keywords: [
+    `${region.name} 유흥`,
+    `${region.name} 가라오케`,
+    `${region.name} 하이퍼블릭`,
+    `${region.name} 가라오케 예약`,
+    `${region.name} 가라오케 가격`,
+    `${region.nearbyStations[0]} 가라오케`,
+    `${region.nearbyStations[0]} 유흥`
+  ],
+};
+
+// Fetch blog posts from Supabase (images are embedded in posts)
+const blogPosts = await getBlogPosts();
+---
+
+<PageLayout {...seoProps} region={region}>
+  <LocalBusinessSchema region={region} />
+  <OrganizationSchema region={region} />
+
+  <HeroSection region={region} />
+  <FeaturesSection />
+  <GallerySection />
+  <IntroSection />
+  <AnalysisSection regionName={region.name} regionId={region.id} stations={region.nearbyStations} landmarks={region.landmarks} />
+  <HotEventSection />
+  <BlogSection posts={blogPosts} />
+  <VenuePreviewSection region={region} />
+</PageLayout>
