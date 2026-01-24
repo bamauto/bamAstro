@@ -482,6 +482,63 @@ Error: Command "astro build" exited with 127
 - [ ] `vercel.json`에 `"framework": null` 추가됨 확인
 - [ ] 변경사항 커밋 및 push
 
+### 12.7 Root Directory 설정 확인 (중요!)
+
+> **⚠️ Vercel 프로젝트의 Root Directory가 잘못 설정되면 빌드 실패!**
+
+**확인 방법:**
+```bash
+vercel project inspect
+```
+
+**정상:** `Root Directory: apps/[지역영문명]`
+**비정상:** `Root Directory: .`
+
+**수정 방법 (API):**
+```bash
+curl -X PATCH "https://api.vercel.com/v9/projects/[PROJECT_ID]?teamId=[TEAM_ID]" \
+  -H "Authorization: Bearer [VERCEL_TOKEN]" \
+  -H "Content-Type: application/json" \
+  -d '{"rootDirectory": "apps/[지역영문명]"}'
+```
+
+**체크리스트:**
+- [ ] `vercel project inspect` 실행
+- [ ] Root Directory가 `apps/[지역영문명]`인지 확인
+- [ ] 잘못된 경우 API로 수정
+
+### 12.8 환경변수 설정 (필수!)
+
+> **⚠️ Supabase 환경변수가 없으면 500 에러 발생!**
+
+**에러:** `Error: supabaseUrl is required.`
+
+**CLI로 환경변수 추가:**
+```bash
+cd apps/[지역영문명]
+
+# SUPABASE_URL
+echo "https://rrzeapykmyrsiqmkwjcf.supabase.co" | vercel env add SUPABASE_URL production
+
+# SUPABASE_KEY
+echo "[SUPABASE_ANON_KEY]" | vercel env add SUPABASE_KEY production
+
+# 확인
+vercel env ls
+```
+
+**재배포:**
+```bash
+git commit --allow-empty -m "chore: trigger redeploy with env vars"
+git push
+```
+
+**체크리스트:**
+- [ ] `SUPABASE_URL` 환경변수 추가됨
+- [ ] `SUPABASE_KEY` 환경변수 추가됨
+- [ ] `vercel env ls`로 확인
+- [ ] 재배포 트리거
+
 **참고 문서:** [NEW_REGION_CREATION_LOG.md - Phase 8](./NEW_REGION_CREATION_LOG.md#phase-8-배포)
 
 ---
