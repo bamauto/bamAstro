@@ -22,16 +22,21 @@ Allow: /images/
 Allow: /fonts/
 
 # ====================================
-# Google-specific rules
+# Google-specific rules (Snippet Optimization)
 # ====================================
 User-agent: Googlebot
 Allow: /
+max-snippet: -1
+max-image-preview: large
 
 # ====================================
-# Naver (Korean Search Engine)
+# Naver (Korean Search Engine) - Snippet Optimization
 # ====================================
 User-agent: Yeti
 Allow: /
+Crawl-delay: 0.5
+max-snippet: 160
+max-image-preview: large
 
 User-agent: Yeti-JSC
 Allow: /
