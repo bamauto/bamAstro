@@ -452,6 +452,36 @@ ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE  In : No matching version found fo
 - [ ] `buildCommand`에 `--filter @bamastro/[지역영문명]` 포함 확인
 - [ ] `outputDirectory`가 `dist`로 설정 확인
 
+### 12.6 Vercel 프레임워크 프리셋 비활성화 (필수!)
+
+> **⚠️ Astro 프로젝트에서 커스텀 buildCommand가 무시되는 경우!**
+
+**오류 메시지:**
+```
+sh: line 1: astro: command not found
+Error: Command "astro build" exited with 127
+```
+
+**원인:** Vercel이 Astro를 자동 감지하여 `buildCommand`를 덮어씀
+
+**해결 방법:**
+
+`vercel.json`에 `"framework": null` 추가:
+
+```json
+{
+  "framework": null,
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+  "buildCommand": "cd ../.. && pnpm --filter @bamastro/[지역영문명] build",
+  "outputDirectory": "dist",
+  ...
+}
+```
+
+**체크리스트:**
+- [ ] `vercel.json`에 `"framework": null` 추가됨 확인
+- [ ] 변경사항 커밋 및 push
+
 **참고 문서:** [NEW_REGION_CREATION_LOG.md - Phase 8](./NEW_REGION_CREATION_LOG.md#phase-8-배포)
 
 ---
