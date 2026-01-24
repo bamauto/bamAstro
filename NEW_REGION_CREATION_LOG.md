@@ -423,6 +423,36 @@ ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE  In : No matching version found fo
    - Build Command: `cd ../.. && pnpm --filter @bamastro/[지역영문명] build`
    - Output Directory: `dist`
 
+### 8.4 pnpm-lock.yaml 동기화 오류 해결
+
+> **⚠️ 신규 앱 추가 후 발생하는 오류!**
+
+**오류 메시지:**
+```
+ERR_PNPM_OUTDATED_LOCKFILE  Cannot install with "frozen-lockfile" because pnpm-lock.yaml is not up to date with <ROOT>/apps/[지역]/package.json
+```
+
+**원인:**
+- 신규 앱 폴더를 생성했지만 루트의 `pnpm-lock.yaml`에 의존성이 등록되지 않음
+- Vercel은 `--frozen-lockfile` 옵션을 기본 사용하므로 lockfile 불일치 시 실패
+
+**해결 방법:**
+```bash
+# 1. 루트에서 pnpm install 실행
+cd /Users/deneb/bamAstro
+pnpm install
+
+# 2. 변경된 lockfile 커밋
+git add pnpm-lock.yaml
+git commit -m "chore: pnpm-lock.yaml 업데이트 ([지역] 의존성 추가)"
+git push
+```
+
+**체크리스트:**
+- [ ] 신규 앱 생성 후 `pnpm install` 실행
+- [ ] `pnpm-lock.yaml` 변경사항 커밋
+- [ ] GitHub에 push
+
 ---
 
 ## Phase 9: 구글 중복 필터링 방지 (매우 중요!)
