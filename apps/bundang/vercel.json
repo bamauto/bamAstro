@@ -1,8 +1,8 @@
 {
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm --filter @bamastro/bundang build",
-  "framework": "astro",
-  "headers": [
+  "buildCommand": "npx astro build",
+  "outputDirectory": "dist",
+    "headers": [
     {
       "source": "/(.*)",
       "headers": [
