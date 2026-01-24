@@ -4069,6 +4069,83 @@ SET published_at = (
 
 ---
 
+## Phase 8.9: SSR 모드 동적 라우트 prerender 설정 (2026-01-25 추가)
+
+> **문제:** SSR 모드(`output: 'server'`)에서 `[region]-*.astro` 동적 라우트 페이지가 404 반환
+> **원인:** SSR 모드에서는 `getStaticPaths()`가 무시됨
+> **해결:** 모든 동적 라우트 페이지에 `export const prerender = true;` 추가
+
+### 증상
+
+Astro 빌드 시 경고 발생:
+```
+[WARN] [router] getStaticPaths() ignored in dynamic page /src/pages/[region]-karaoke-guide/index.astro.
+Add `export const prerender = true;` to prerender the page as static HTML during the build process.
+```
+
+배포 후 지역 가이드 페이지 접속 시 404 에러.
+
+### 해결 방법
+
+모든 `[region]-*.astro` 파일의 frontmatter에 `export const prerender = true;` 추가:
+
+```astro
+---
+export const prerender = true;
+
+import { PageLayout, ... } from '@bamastro/ui';
+// ... 나머지 코드
+---
+```
+
+### 수정 대상 파일 (17개)
+
+**가이드 메인 페이지 (6개):**
+- `[region]-karaoke-guide/index.astro`
+- `[region]-highpublic-guide/index.astro`
+- `[region]-room-salon-guide/index.astro`
+- `[region]-shirtsroom-guide.astro`
+- `[region]-kimono-room-guide.astro`
+- `[region]-hostbar-guide.astro`
+
+**FAQ 페이지 (6개):**
+- `[region]-karaoke-guide/faq.astro`
+- `[region]-highpublic-guide/faq.astro`
+- `[region]-room-salon-guide/faq.astro`
+- `[region]-shirtsroom-guide/faq.astro`
+- `[region]-kimono-room-guide/faq.astro`
+- `[region]-hostbar-guide/faq.astro`
+
+**비교 페이지 (3개):**
+- `[region]-karaoke-vs-highpublic.astro`
+- `[region]-roomsalon-vs-hostbar.astro`
+- `[region]-shirtsroom-vs-kimonoroom.astro`
+
+**기타 (2개):**
+- `[region]-entertainment-beginner-guide.astro`
+- `[region]-entertainment-price-guide.astro`
+
+### 검증
+
+빌드 시 "prerendering static routes" 섹션에서 모든 페이지가 생성되는지 확인:
+
+```
+ prerendering static routes
+▶ src/pages/[region]-karaoke-guide/index.astro
+  └─ /ingedong-karaoke-guide/index.html (+3ms)
+...
+```
+
+### 주의사항
+
+- **신규 지역 생성 시 반드시 확인:** 복사한 템플릿에 `prerender = true`가 있는지 확인
+- **새 동적 페이지 추가 시:** `getStaticPaths()` 사용 시 반드시 `prerender = true` 함께 추가
+- **SSR vs SSG:**
+  - `prerender = true`: 빌드 시점에 정적 HTML 생성 (SSG)
+  - 없으면: 요청 시점에 서버에서 렌더링 (SSR) → 동적 라우트 미작동
+
+---
+
 **작업 완료일:** 2026-01-25
 **최종 수정:** 2026-01-25
 **스크립트 위치:** `/Users/deneb/bamAstro/scripts/copy-blog-posts-for-new-region.ts`

@@ -1506,12 +1506,73 @@ LIMIT 20;
 
 ---
 
-**참고 문서:** [NEW_REGION_CREATION_LOG.md - Phase 18](./NEW_REGION_CREATION_LOG.md#phase-18-블로그-포스트-지역별-생성-및-스케줄링)
+## Phase 12.9: SSR 동적 라우트 prerender 설정
+
+> **⚠️ SSR 모드에서 동적 라우트 페이지 404 에러 발생 시 이 항목 확인!**
+
+SSR 모드(`output: 'server'`)에서는 `getStaticPaths()`가 기본적으로 무시됨.
+동적 라우트 페이지가 빌드 시 정적으로 생성되려면 `export const prerender = true;` 필수.
+
+### 적용 위치
+
+모든 `[region]-*.astro` 파일의 frontmatter 첫 줄에 추가:
+
+```astro
+---
+export const prerender = true;
+
+import { PageLayout, ... } from '@bamastro/ui';
+// ...
+---
+```
+
+### 체크리스트
+
+**가이드 메인 페이지 (6개):**
+- [ ] `[region]-karaoke-guide/index.astro`
+- [ ] `[region]-highpublic-guide/index.astro`
+- [ ] `[region]-room-salon-guide/index.astro`
+- [ ] `[region]-shirtsroom-guide.astro`
+- [ ] `[region]-kimono-room-guide.astro`
+- [ ] `[region]-hostbar-guide.astro`
+
+**FAQ 페이지 (6개):**
+- [ ] `[region]-karaoke-guide/faq.astro`
+- [ ] `[region]-highpublic-guide/faq.astro`
+- [ ] `[region]-room-salon-guide/faq.astro`
+- [ ] `[region]-shirtsroom-guide/faq.astro`
+- [ ] `[region]-kimono-room-guide/faq.astro`
+- [ ] `[region]-hostbar-guide/faq.astro`
+
+**비교 페이지 (3개):**
+- [ ] `[region]-karaoke-vs-highpublic.astro`
+- [ ] `[region]-roomsalon-vs-hostbar.astro`
+- [ ] `[region]-shirtsroom-vs-kimonoroom.astro`
+
+**기타 (2개):**
+- [ ] `[region]-entertainment-beginner-guide.astro`
+- [ ] `[region]-entertainment-price-guide.astro`
+
+### 검증
+
+```bash
+pnpm --filter @bamastro/[지역명] build
+```
+
+빌드 로그에서 "prerendering static routes" 섹션 확인:
+```
+ prerendering static routes
+▶ src/pages/[region]-karaoke-guide/index.astro
+  └─ /[지역ID]-karaoke-guide/index.html (+3ms)
+```
+
+---
+
+**참고 문서:** [NEW_REGION_CREATION_LOG.md - Phase 8.9](./NEW_REGION_CREATION_LOG.md#phase-89-ssr-모드-동적-라우트-prerender-설정-2026-01-25-추가)
 
 **스크립트 위치:** `/Users/deneb/bamAstro/scripts/copy-blog-posts-for-new-region.ts`
 
 **작성일:** 2026-01-25
 **최종 수정:** 2026-01-25
-**버전:** 1.1  
-**버전:** 1.0
+**버전:** 1.2
 
