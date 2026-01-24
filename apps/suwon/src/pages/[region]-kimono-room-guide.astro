@@ -16,9 +16,11 @@ if (!venueType) {
   throw new Error(`Venue type 'kimonoroom' not found in region config`);
 }
 
+const localDesc = region.localContent?.venueDescriptions?.kimonoroom || '';
+
 const seoProps = {
   title: `${region.name} 기모노룸(일본 테마) 완벽 가이드 | 이색 프리미엄 라운지`,
-  description: `${region.name} 기모노룸(일본 테마 라운지) 완벽 가이드. 일본풍 이색 테마 라운지. ${region.nearbyStations.slice(0,2).join('·')} 중심 포토존, 특별한 분위기, 프리미엄 서비스 상세 안내.`,
+  description: `${region.name} 기모노룸 완벽 가이드. ${localDesc} 이색 테마, 프리미엄 서비스 안내.`,
   keywords: [
     `${region.name} 기모노룸`,
     `${region.name} 일본 테마 라운지`,

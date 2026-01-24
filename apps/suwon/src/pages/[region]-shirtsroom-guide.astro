@@ -16,9 +16,11 @@ if (!venueType) {
   throw new Error(`Venue type 'shirtsroom' not found in region config`);
 }
 
+const localDesc = region.localContent?.venueDescriptions?.shirtsroom || '';
+
 const seoProps = {
   title: `${region.name} 셔츠룸(화이트룸) 완벽 가이드 | 캐주얼 프리미엄 라운지`,
-  description: `${region.name} 셔츠룸(화이트룸) 완벽 가이드. 캐주얼하면서 세련된 프리미엄 라운지. ${region.nearbyStations.slice(0,2).join('·')} 중심, 깔끔한 응대, 합리적 가격. 시스템, 예약 상세 안내.`,
+  description: `${region.name} 셔츠룸 완벽 가이드. ${localDesc} 깔끔한 응대, 시스템 및 예약 안내.`,
   keywords: [
     `${region.name} 셔츠룸`,
     `${region.name} 화이트룸`,

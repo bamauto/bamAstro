@@ -16,9 +16,11 @@ if (!venueType) {
   throw new Error(`Venue type 'roomsalon' not found in region config`);
 }
 
+const localDesc = region.localContent?.venueDescriptions?.roomsalon || '';
+
 const seoProps = {
   title: `${region.name} 룸살롱(프리미엄 클럽) 비즈니스 접대 가이드 | 예약·가격`,
-  description: `${region.name} 룸살롱(프리미엄 클럽) 완벽 가이드. 비즈니스 접대·VIP 예약·프라이빗 서비스 전문. ${region.nearbyStations.slice(0,2).join('·')} 중심 추천. 가격, 초이스, 에티켓 상세 안내.`,
+  description: `${region.name} 룸살롱 완벽 가이드. ${localDesc} 비즈니스 접대, 가격 및 에티켓 안내.`,
   keywords: [
     `${region.name} 룸살롱`,
     `${region.name} 프리미엄 클럽`,
