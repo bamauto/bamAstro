@@ -339,6 +339,90 @@ pnpm --filter @bamastro/[지역영문명] build
 - A 레코드: 76.76.21.21
 - CNAME: cname.vercel-dns.com
 
+### 8.3 pnpm Workspace 오류 해결 (중요!)
+
+> **⚠️ 이 문제는 반복적으로 발생합니다!** 이 프로젝트는 pnpm workspace를 사용하는 monorepo입니다.
+> Vercel 기본 설정으로 배포하면 `workspace:*` 프로토콜 오류가 발생합니다.
+
+**오류 메시지:**
+```
+npm error Unsupported URL Type "workspace:": workspace:*
+ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE  In : No matching version found for @bamastro/ui@* inside the workspace
+```
+
+**원인:**
+- pnpm workspace에서 패키지 간 의존성을 `workspace:*` 프로토콜로 관리
+- Vercel이 앱 폴더만 빌드하려 하면 workspace 컨텍스트를 잃음
+
+**해결 방법:**
+
+`apps/[지역영문명]/vercel.json` 파일에 다음 설정 추가:
+
+```json
+{
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+  "buildCommand": "cd ../.. && pnpm --filter @bamastro/[지역영문명] build",
+  "outputDirectory": "dist",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" }
+      ]
+    },
+    {
+      "source": "/images/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*).webp",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*).woff2",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/favicon.ico",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    },
+    {
+      "source": "/manifest.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" },
+        { "key": "Content-Type", "value": "application/manifest+json" }
+      ]
+    }
+  ]
+}
+```
+
+**핵심 설정 설명:**
+| 설정 | 역할 |
+|------|------|
+| `installCommand` | 루트에서 pnpm install 실행 → workspace 의존성 해결 |
+| `buildCommand` | 루트에서 특정 앱만 빌드 (`--filter` 사용) |
+| `outputDirectory` | Astro 빌드 결과물 위치 (dist) |
+
+**Vercel 대시보드 설정:**
+1. Root Directory: `apps/[지역영문명]`
+2. Build & Development Settings → Override 체크:
+   - Install Command: `cd ../.. && pnpm install --frozen-lockfile`
+   - Build Command: `cd ../.. && pnpm --filter @bamastro/[지역영문명] build`
+   - Output Directory: `dist`
+
 ---
 
 ## Phase 9: 구글 중복 필터링 방지 (매우 중요!)
