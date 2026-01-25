@@ -31,6 +31,14 @@
    - `apps/{지역}/public/images/venues/*_main.webp` (6개)
 4. **.env 파일 생성**: Supabase 연결 정보 설정
 5. **Vercel 배포 설정**: vercel.json 및 도메인 연결
+6. **pnpm-lock.yaml 업데이트 및 커밋**: 새 지역 추가 후 반드시 실행
+   ```bash
+   pnpm install --no-frozen-lockfile
+   git add pnpm-lock.yaml
+   git commit -m "chore: update pnpm-lock.yaml"
+   git push
+   ```
+   > ⚠️ **중요**: Vercel 빌드는 `--frozen-lockfile` 사용. lock 파일이 package.json과 불일치하면 빌드 실패
 
 ## 프로젝트 구조
 
