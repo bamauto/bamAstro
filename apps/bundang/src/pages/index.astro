@@ -28,7 +28,7 @@ const blogPosts = await getBlogPosts();
   <HeroSection region={region} />
   <FeaturesSection />
   <GallerySection />
-  <IntroSection />
+  <IntroSection region={region} />
   <AnalysisSection regionName={region.name} regionId={region.id} stations={region.nearbyStations} landmarks={region.landmarks} />
   <HotEventSection />
   <BlogSection posts={blogPosts} />

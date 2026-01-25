@@ -1,3 +1,14 @@
+---
+import type { RegionConfig } from '../../types/region';
+
+interface Props {
+  region?: RegionConfig;
+}
+
+const { region } = Astro.props;
+const imageName = region?.id ? `${region.id}-highpublic-karaoke-private-room.webp` : 'suwon-highpublic-karaoke-private-room.webp';
+---
+
 <section class="py-24 md:py-32 relative md:bg-fixed bg-center bg-cover bg-transparent">
   <div class="absolute inset-0 bg-slate-950/30 backdrop-blur-[1px]"></div>
   <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-16 relative z-10">
@@ -34,7 +45,7 @@
         <div class="absolute -inset-2 md:-inset-4 bg-gradient-to-r from-purple-500 to-fuchsia-600 rounded-2xl opacity-30 blur-2xl animate-pulse"></div>
         <div class="aspect-[4/5] md:h-[500px] bg-slate-800 rounded-2xl overflow-hidden relative border border-slate-700 shadow-2xl md:transform md:rotate-2 hover:rotate-0 transition-transform duration-700">
           <img
-            src="/images/suwon-highpublic-karaoke-private-room.webp"
+            src={`/images/${imageName}`}
             alt="프리미엄 프라이빗 룸 인테리어 - 럭셔리한 조명과 고급 소파가 있는 VIP룸"
             class="absolute inset-0 w-full h-full object-cover"
           />
