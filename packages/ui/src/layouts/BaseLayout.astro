@@ -35,7 +35,7 @@ const props = Astro.props;
     <!-- Preload critical font -->
     <link
       rel="preload"
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Regular.woff2"
+      href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/woff2/PretendardVariable.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -80,8 +80,8 @@ const props = Astro.props;
       <!-- Grid Pattern -->
       <div class="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.05]"></div>
       
-      <!-- Global Noise/Texture (Optional for more texture) -->
-      <div class="absolute inset-0 bg-repeat opacity-[0.02]" style="background-image: url('/noise.png');"></div>
+      <!-- Subtle gradient overlay for texture -->
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/5 to-transparent opacity-50"></div>
     </div>
 
     <!-- Content -->

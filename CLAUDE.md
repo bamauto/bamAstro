@@ -1,5 +1,13 @@
 # bamAstro 프로젝트 가이드
 
+## 중요 주의사항
+
+1. **Vercel 프로젝트는 절대 삭제하지 않는다.** 기존에 동일한 이름의 프로젝트가 있는 경우, `bamastro_` 프리픽스를 붙여서 새 프로젝트를 생성한다. (예: `bamastro_anyang`)
+
+2. **Vercel 환경변수 설정 주의**: `echo "값" | vercel env add` 방식은 값이 잘못 저장될 수 있음.
+   - **권장**: `.env` 파일 생성 후 빌드 → `vercel deploy --prebuilt --prod`
+   - 환경변수가 빌드에 하드코딩되므로 Vercel 환경변수 설정 불필요
+
 ## 도메인 목록
 
 | 지역 | 앱 이름 | 도메인 |
@@ -9,6 +17,8 @@
 | 동탄 | dongtan | best-karaoke.com |
 | 인계동 | ingedong | public-karaoke.net |
 | 수원 | suwon | public-karaoke.com |
+| 평택 | pyeongtaek | korea-karaoke.com |
+| 안양 | anyang | nextkaraoke.com |
 
 ## 새 지역 추가 시 필수 작업
 
@@ -32,6 +42,8 @@ bamAstro/
 │   ├── dongtan/      # 동탄 사이트
 │   ├── ingedong/     # 인계동 사이트
 │   ├── suwon/        # 수원 사이트
+│   ├── pyeongtaek/   # 평택 사이트
+│   ├── anyang/       # 안양 사이트
 │   └── template/     # 새 지역 템플릿
 ├── packages/
 │   └── ui/           # 공통 UI 컴포넌트
@@ -49,3 +61,10 @@ bamAstro/
 - 모든 앱은 Supabase 동일 DB 사용 (bamastro_blog_posts 테이블)
 - SSR 모드로 운영 (블로그 포스트 동적 로딩)
 - pnpm workspace 모노레포 구조
+
+## 블로그 포스트 주의사항
+
+**status 필드는 반드시 'published'로 설정**:
+- 블로그 코드에서 `.eq('status', 'published')` 필터링 사용
+- status가 'draft'면 published_at 날짜와 상관없이 블로그에 표시 안 됨
+- 새 지역 블로그 복사 시 INSERT 문에 `status = 'published'` 반드시 포함

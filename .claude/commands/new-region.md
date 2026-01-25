@@ -1,5 +1,7 @@
 # 신규 지역 사이트 생성
 
+**⚠️ 중요: Vercel 프로젝트는 절대 삭제하지 않는다. 기존에 동일한 이름의 프로젝트가 있으면 `bamastro_` 프리픽스를 붙여서 새 프로젝트를 생성한다. (예: `bamastro_anyang`)**
+
 새로운 지역 사이트를 생성합니다. 아래 가이드를 따라 순차적으로 진행하세요.
 
 ---
@@ -119,6 +121,20 @@ mv suwon-[세부지역]-guide.astro [지역]-[세부지역]-guide.astro
 - FAQ 내용
 - 링크 URL
 
+### 5.2 index.astro IntroSection region prop 확인 (필수!)
+
+> ⚠️ **누락 시 404 오류 발생**: IntroSection에 region prop이 없으면 suwon 이미지를 참조하여 404 발생
+
+**파일:** `apps/[지역영문명]/src/pages/index.astro`
+
+```astro
+<!-- 잘못된 예 (404 발생) -->
+<IntroSection />
+
+<!-- 올바른 예 -->
+<IntroSection region={region} />
+```
+
 ---
 
 ## Phase 6: SEO 파일 수정
@@ -131,6 +147,45 @@ mv suwon-[세부지역]-guide.astro [지역]-[세부지역]-guide.astro
 - `apps/[지역영문명]/public/manifest.json`
 - `name`: `"[지역명] 유흥 가이드"`
 - `short_name`: `"[지역명]"`
+
+### 6.3 RSS 피드 설정 (필수!)
+
+> RSS 피드는 검색엔진 색인 및 블로그 구독에 필수
+
+**1. 의존성 추가:**
+```bash
+cd apps/[지역영문명]
+pnpm add @astrojs/rss
+```
+
+**2. RSS 파일 생성:** `apps/[지역영문명]/src/pages/rss.xml.ts`
+
+```typescript
+import rss from '@astrojs/rss';
+import type { APIContext } from 'astro';
+import { getBlogPosts } from '@/lib/supabase';
+import { region } from '@/config/region';
+
+export async function GET(context: APIContext) {
+  const posts = await getBlogPosts();
+
+  return rss({
+    title: `${region.name} 유흥 가이드 | ${region.domain}`,
+    description: `${region.name} 가라오케, 하이퍼블릭, 유흥 정보 블로그.`,
+    site: context.site || `https://${region.domain}`,
+    items: posts.map((post) => ({
+      title: post.title,
+      pubDate: new Date(post.published_at || post.created_at),
+      description: post.excerpt,
+      link: `/blog/${post.slug}/`,
+      categories: [post.category],
+    })),
+    customData: `<language>ko-KR</language>`,
+  });
+}
+```
+
+**3. 확인:** `https://[도메인]/rss.xml`
 
 ---
 
@@ -169,19 +224,68 @@ pnpm --filter @bamastro/[지역영문명] dev
 }
 ```
 
-### 8.2 Vercel 프로젝트 설정
-- Root Directory: `apps/[지역영문명]`
-- Framework Preset: 비활성화 (`"framework": null`)
+### 8.2 Vercel 프로젝트 생성
 
-### 8.3 환경변수 설정 (필수!)
+> 프로젝트명은 `bamastro-[지역영문명]` 형식으로 통일
 
 ```bash
 cd apps/[지역영문명]
-echo "https://rrzeapykmyrsiqmkwjcf.supabase.co" | vercel env add SUPABASE_URL production
-echo "[SUPABASE_ANON_KEY]" | vercel env add SUPABASE_KEY production
+
+# 기존 .vercel 폴더 삭제 (템플릿에서 복사된 경우)
+rm -rf .vercel
+
+# 새 프로젝트로 배포 (bamastro- 프리픽스 사용)
+vercel --prod --yes --name bamastro-[지역영문명]
 ```
 
-### 8.4 도메인 연결
+프로젝트 생성 후 `.vercel/project.json` 수정:
+
+```json
+{
+  "projectId": "[생성된_PROJECT_ID]",
+  "orgId": "team_TBb1NKrIoGKgiKknFNgf5r1G",
+  "projectName": "bamastro-[지역영문명]",
+  "settings": {
+    "framework": null,
+    "installCommand": "cd ../.. && pnpm install",
+    "buildCommand": "cd ../.. && pnpm --filter @bamastro/[지역영문명] build",
+    "outputDirectory": "dist"
+  }
+}
+```
+
+### 8.3 Supabase 환경변수 설정 (필수!)
+
+> ⚠️ **매우 중요**: 환경변수 없으면 블로그 글이 표시되지 않음!
+>
+> ⚠️ **주의**: Vercel CLI로 환경변수를 echo | vercel env add 방식으로 추가하면 값이 잘못 저장될 수 있음!
+> **권장 방법**: .env 파일 생성 후 빌드하면 환경변수가 빌드에 하드코딩됨 (prebuilt 배포 시 Vercel 환경변수 불필요)
+
+```bash
+cd apps/[지역영문명]
+
+# 방법 1: .env 파일 생성 (권장)
+cat > .env << 'EOF'
+SUPABASE_URL=https://rrzeapykmyrsiqmkwjcf.supabase.co
+SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyemVhcHlrbXlyc2lxbWt3amNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MDI0MzIsImV4cCI6MjA4NDQ3ODQzMn0.1syiV186n8K4pJnCqMXNBR4N4fr0BHnSba5sBrtMjGk
+EOF
+
+# 빌드 후 prebuilt 배포 (환경변수가 빌드에 포함됨)
+cd ../.. && pnpm --filter @bamastro/[지역영문명] build
+cd apps/[지역영문명] && vercel deploy --prebuilt --prod
+```
+
+### 8.4 빌드 및 배포
+
+```bash
+# 로컬 빌드 후 배포 (prebuilt 방식)
+vercel build && vercel deploy --prebuilt --prod
+
+# 또는 Vercel 서버에서 빌드
+vercel --prod --yes
+```
+
+### 8.5 도메인 연결
 - Vercel → Settings → Domains
 - DNS: A 레코드 `76.76.21.21`, CNAME `cname.vercel-dns.com`
 
@@ -207,99 +311,215 @@ export const prerender = true;
 
 ---
 
-## Phase 10: 이미지 교체 (권장)
+## Phase 10: 이미지 설정 (필수!)
 
 ### 10.1 이미지 폴더 구조
 ```
 apps/[지역]/public/images/
-├── venues/           # 제휴 업소 안내 섹션
-│   ├── karaoke_main.webp, karaoke_1-6.webp
-│   ├── highpublic_main.webp, highpublic_1-6.webp
+├── [지역]-highpublic-karaoke-private-room.webp  # 메인 히어로 이미지
+├── venues/           # 제휴 업소 안내 섹션 (수원과 동일하게 유지)
+│   ├── karaoke_main.webp, highpublic_1-6.webp
+│   ├── hyperpublic_main.webp
 │   └── ...
-└── partners/         # 파트너 갤러리 섹션
+└── partners/         # 파트너 갤러리 섹션 (랜덤 이미지로 교체!)
     └── partner_1-10.webp
 ```
 
-### 10.2 수원 기준 복사 (동기화)
+### 10.2 venues 이미지 복사 (수원 기준)
 ```bash
-for region in bundang gangnam ingedong; do
-  rm -rf apps/$region/public/images/venues
-  rm -rf apps/$region/public/images/partners
-  cp -r apps/suwon/public/images/venues apps/$region/public/images/
-  cp -r apps/suwon/public/images/partners apps/$region/public/images/
-done
+# venues는 수원에서 그대로 복사 (변경 금지)
+cp -r apps/suwon/public/images/venues apps/[지역영문명]/public/images/
+```
+
+### 10.3 메인 히어로 이미지 이름 변경
+```bash
+mv apps/[지역영문명]/public/images/suwon-highpublic-karaoke-private-room.webp \
+   apps/[지역영문명]/public/images/[지역영문명]-highpublic-karaoke-private-room.webp
+```
+
+### 10.4 partners 갤러리 랜덤 이미지 교체 (필수!)
+```python
+# Python 스크립트로 실행
+import os, shutil, random
+
+src_dir = "/Users/deneb/Downloads/제목을 입력해주세요_분류완료/gallery"
+partners_dir = "apps/[지역영문명]/public/images/partners"
+
+files = [f for f in os.listdir(src_dir) if f.endswith('.webp')]
+random.shuffle(files)
+
+for i, f in enumerate(files[:10], 1):
+    shutil.copy2(os.path.join(src_dir, f),
+                 os.path.join(partners_dir, f"partner_{i}.webp"))
+```
+
+> ⚠️ **중요**: venues 이미지는 수원과 동일하게 유지, partners 갤러리만 랜덤 교체!
+
+### 10.5 og-home.jpg 생성 (필수!)
+
+> og:image는 SNS 공유 시 표시되는 이미지. partners 이미지를 변환하여 사용
+
+```bash
+cd apps/[지역영문명]/public
+
+# partners 이미지를 jpg로 변환하여 og-home.jpg 생성
+sips -s format jpeg images/partners/partner_1.webp --out og-home.jpg
 ```
 
 ---
 
-## Phase 11: 블로그 포스트 생성 (기존 지역 복사 방식)
+## Phase 11: 블로그 포스트 복사 (필수!)
 
-> ⚠️ 블로그 포스트는 직접 생성하지 않고, 기존 지역(분당 등)에서 복사 후 지역명 치환 + 셔플 방식으로 생성합니다.
+> ⚠️ 블로그 포스트는 직접 생성하지 않고, **gangnam**에서 복사 후 지역명 치환 + 셔플 방식으로 생성합니다.
 
-### 11.1 Supabase MCP로 SQL 실행
+### 11.1 Supabase MCP로 블로그 포스트 복사
 
-**mcp__supabase__execute_sql** 도구를 사용하여 아래 SQL 실행:
+**mcp__supabase__execute_sql** 도구 사용 (project_id: `rrzeapykmyrsiqmkwjcf`)
 
 ```sql
--- 1. 기존 지역(bundang)에서 복사하여 새 지역 포스트 생성
--- [신규지역영문], [신규지역한글], [기존지역영문], [기존지역한글] 치환 필요
-
-INSERT INTO bamastro_blog_posts (
-  title, slug, excerpt, content, category,
-  read_time, featured, gradient, status, region, published_at
-)
+-- 강남에서 신규 지역으로 복사 (지역명 치환 + 날짜 셔플)
+-- ⚠️ 중요: status를 'published'로 반드시 설정! (안 하면 블로그에 안 보임)
+INSERT INTO bamastro_blog_posts (region, category, title, slug, content, excerpt, status, created_at, featured_image)
 SELECT
-  -- 제목: 기존 지역명 → 신규 지역명 치환
-  REPLACE(REPLACE(title, '[기존지역한글]', '[신규지역한글]'), '[기존지역영문]', '[신규지역영문]'),
-  -- 슬러그: 지역명 치환 + 랜덤 suffix로 중복 방지
-  REPLACE(slug, '[기존지역영문]', '[신규지역영문]') || '-' || SUBSTRING(gen_random_uuid()::text, 1, 6),
-  -- 요약: 지역명 치환
-  REPLACE(REPLACE(excerpt, '[기존지역한글]', '[신규지역한글]'), '[기존지역영문]', '[신규지역영문]'),
-  -- 본문: 지역명 치환
-  REPLACE(REPLACE(content, '[기존지역한글]', '[신규지역한글]'), '[기존지역영문]', '[신규지역영문]'),
+  '[신규지역영문]' as region,
   category,
-  read_time,
-  featured,
-  gradient,
-  'published',
-  '[신규지역영문]',  -- 새 지역 region 값
-  -- 발행일: 랜덤 오프셋으로 셔플 효과 (1~60일 전 랜덤)
-  NOW() - (FLOOR(RANDOM() * 60) + 1) * INTERVAL '1 day'
+  REPLACE(REPLACE(title, '강남', '[신규지역한글]'), 'gangnam', '[신규지역영문]') as title,
+  REPLACE(REPLACE(slug, 'gangnam', '[신규지역영문]'), 'bundang', '[신규지역영문]') as slug,
+  REPLACE(REPLACE(content, '강남', '[신규지역한글]'), 'gangnam', '[신규지역영문]') as content,
+  REPLACE(REPLACE(excerpt, '강남', '[신규지역한글]'), 'gangnam', '[신규지역영문]') as excerpt,
+  'published' as status,  -- 필수! 이게 없으면 draft로 들어가서 블로그에 안 보임
+  created_at + (random() * interval '30 days') - interval '15 days' as created_at,
+  featured_image
 FROM bamastro_blog_posts
-WHERE region = '[기존지역영문]'
-  AND status = 'published';
+WHERE region = 'gangnam'
+ON CONFLICT (slug) DO NOTHING;
 ```
 
-### 11.2 예시: 분당 → 동탄 복사
+### 11.2 status 확인 및 설정 (필수!)
+
+> ⚠️ **중요**: status가 'draft'면 블로그에 안 보임! 반드시 'published'로 설정 필요
 
 ```sql
-INSERT INTO bamastro_blog_posts (
-  title, slug, excerpt, content, category,
-  read_time, featured, gradient, status, region, published_at
-)
-SELECT
-  REPLACE(REPLACE(title, '분당', '동탄'), 'bundang', 'dongtan'),
-  REPLACE(slug, 'bundang', 'dongtan') || '-' || SUBSTRING(gen_random_uuid()::text, 1, 6),
-  REPLACE(REPLACE(excerpt, '분당', '동탄'), 'bundang', 'dongtan'),
-  REPLACE(REPLACE(content, '분당', '동탄'), 'bundang', 'dongtan'),
-  category, read_time, featured, gradient,
-  'published', 'dongtan',
-  NOW() - (FLOOR(RANDOM() * 60) + 1) * INTERVAL '1 day'
-FROM bamastro_blog_posts
-WHERE region = 'bundang' AND status = 'published';
-```
-
-### 11.3 복사 후 확인
-
-```sql
--- 신규 지역 포스트 수 확인
-SELECT COUNT(*) FROM bamastro_blog_posts WHERE region = '[신규지역영문]';
-
--- 카테고리별 분포 확인
-SELECT category, COUNT(*)
+-- status 확인
+SELECT status, COUNT(*)
 FROM bamastro_blog_posts
 WHERE region = '[신규지역영문]'
-GROUP BY category;
+GROUP BY status;
+
+-- status가 'draft'이면 'published'로 변경
+UPDATE bamastro_blog_posts
+SET status = 'published'
+WHERE region = '[신규지역영문]' AND status != 'published';
+```
+
+### 11.3 미래 스케줄링 (카테고리별 6개/일) - 매우 중요!
+
+> ⚠️ **핵심**: 모든 포스트를 미래 날짜로 설정 후, 10개만 오늘로 변경
+
+```sql
+-- 모든 포스트를 내일부터 카테고리별 6개/일로 스케줄링
+WITH numbered AS (
+  SELECT id, category,
+         ROW_NUMBER() OVER (PARTITION BY category ORDER BY random()) as rn
+  FROM bamastro_blog_posts
+  WHERE region = '[신규지역영문]'
+)
+UPDATE bamastro_blog_posts b
+SET published_at = DATE(NOW()) + INTERVAL '1 day'
+    + ((n.rn - 1) / 6) * INTERVAL '1 day'  -- 6개마다 하루씩 증가
+    + ((n.rn - 1) % 6) * INTERVAL '2 hours' -- 같은 날 내 2시간 간격
+    + (CASE n.category
+        WHEN '가라오케' THEN INTERVAL '0 minutes'
+        WHEN '하이퍼블릭' THEN INTERVAL '20 minutes'
+        WHEN '셔츠룸' THEN INTERVAL '40 minutes'
+        WHEN '룸살롱' THEN INTERVAL '60 minutes'
+        WHEN '기모노룸' THEN INTERVAL '80 minutes'
+        WHEN '호빠' THEN INTERVAL '100 minutes'
+       END)
+FROM numbered n
+WHERE b.id = n.id;
+```
+
+### 11.4 오늘 공개할 10개만 설정
+
+```sql
+-- 10개만 오늘 날짜로 변경 (즉시 공개)
+UPDATE bamastro_blog_posts
+SET published_at = NOW() - (random() * INTERVAL '6 hours')
+WHERE id IN (
+  SELECT id FROM (
+    SELECT id, ROW_NUMBER() OVER (PARTITION BY category ORDER BY random()) as rn
+    FROM bamastro_blog_posts
+    WHERE region = '[신규지역영문]'
+  ) sub
+  WHERE rn <= 2
+  LIMIT 10
+);
+```
+
+### 11.5 스케줄 및 status 최종 확인 (필수!)
+
+```sql
+-- 공개/예약 상태 + status 확인
+SELECT
+  status,
+  CASE WHEN published_at <= NOW() THEN '현재 공개' ELSE '미래 예약' END as publish_status,
+  COUNT(*) as count
+FROM bamastro_blog_posts
+WHERE region = '[신규지역영문]'
+GROUP BY status, CASE WHEN published_at <= NOW() THEN '현재 공개' ELSE '미래 예약' END
+ORDER BY status, publish_status;
+-- 예상: status='published', 현재 공개 10개, 미래 예약 1,070개
+```
+
+### 11.6 복사 결과 확인
+
+```sql
+-- 카테고리별 포스트 수 확인 (각 180개, 총 1,080개 예상)
+SELECT region, category, COUNT(*) as count
+FROM bamastro_blog_posts
+WHERE region = '[신규지역영문]'
+GROUP BY region, category
+ORDER BY category;
+```
+
+### 11.7 블로그 이미지 할당 (필수!)
+
+> ⚠️ **중요**: featured_image가 null이면 블로그 목록에서 이미지가 안 보임!
+
+```sql
+-- gangnam 이미지를 anyang에 랜덤 할당
+WITH image_list AS (
+    SELECT DISTINCT featured_image
+    FROM bamastro_blog_posts
+    WHERE region = 'gangnam' AND featured_image IS NOT NULL
+),
+new_region_posts AS (
+    SELECT id, ROW_NUMBER() OVER (ORDER BY random()) as rn
+    FROM bamastro_blog_posts
+    WHERE region = '[신규지역영문]'
+),
+image_array AS (
+    SELECT featured_image, ROW_NUMBER() OVER (ORDER BY random()) as img_rn
+    FROM image_list
+)
+UPDATE bamastro_blog_posts bp
+SET featured_image = (
+    SELECT featured_image
+    FROM image_array
+    WHERE img_rn = ((nrp.rn - 1) % (SELECT COUNT(*) FROM image_list)) + 1
+)
+FROM new_region_posts nrp
+WHERE bp.id = nrp.id;
+
+-- 이미지 할당 확인
+SELECT
+    COUNT(*) as total,
+    COUNT(DISTINCT featured_image) as unique_images,
+    SUM(CASE WHEN featured_image IS NOT NULL THEN 1 ELSE 0 END) as with_image
+FROM bamastro_blog_posts
+WHERE region = '[신규지역영문]';
+-- 예상: total=1080, unique_images=362, with_image=1080
 ```
 
 ---
@@ -308,16 +528,46 @@ GROUP BY category;
 
 ### 12.1 Google Search Console
 1. [Google Search Console](https://search.google.com/search-console) 접속
-2. 속성 추가 → URL 프리픽스
+2. 속성 추가 → URL 프리픽스: `https://[도메인]`
 3. 소유권 확인 (HTML 태그)
-4. `region.ts`에 `seo.googleVerification` 추가
-5. Sitemaps 제출: `https://[도메인]/sitemap-index.xml`
+4. `region.ts`에 `seo.googleVerification` 추가 후 재배포
+5. **Sitemaps 제출:**
+   - `https://[도메인]/sitemap-index.xml`
+6. **RSS 제출** (선택):
+   - `https://[도메인]/rss.xml`
 
 ### 12.2 Naver Search Advisor
 1. [Naver Search Advisor](https://searchadvisor.naver.com/) 접속
-2. 사이트 등록 및 소유 확인
-3. `region.ts`에 `seo.naverVerification` 추가
-4. 사이트맵 제출
+2. 사이트 등록 → 사이트 소유 확인
+3. `region.ts`에 `seo.naverVerification` 추가 후 재배포
+4. **사이트맵 제출:**
+   - 요청 → 사이트맵 제출 → `https://[도메인]/sitemap-index.xml`
+5. **RSS 제출:**
+   - 요청 → RSS 제출 → `https://[도메인]/rss.xml`
+
+---
+
+## Phase 13: GitHub Actions Sitemap Ping 설정
+
+> 매일 자동으로 Google에 사이트맵 ping을 보내 색인 요청
+
+**파일:** `.github/workflows/sitemap-ping.yml`
+
+DOMAINS 배열에 새 도메인 추가:
+
+```yaml
+DOMAINS=(
+  "high-karaoke.com"      # 강남
+  "hikaraoke.com"         # 분당
+  "best-karaoke.com"      # 동탄
+  "public-karaoke.net"    # 인계동
+  "public-karaoke.com"    # 수원
+  "[새도메인]"            # [지역명]
+)
+```
+
+수동 실행 테스트:
+- GitHub → Actions → Daily Sitemap Ping → Run workflow
 
 ---
 
@@ -331,6 +581,11 @@ GROUP BY category;
 - [ ] 블로그 페이지 정상 표시
 - [ ] Google Search Console 등록 완료
 - [ ] Naver Search Advisor 등록 완료
+- [ ] GitHub Actions Sitemap Ping 도메인 추가
+- [ ] og-home.jpg 설정 확인
+- [ ] RSS 피드 정상 작동 (`/rss.xml`)
+- [ ] Google Search Console 사이트맵/RSS 제출
+- [ ] Naver Search Advisor 사이트맵/RSS 제출
 
 ---
 
@@ -341,5 +596,5 @@ GROUP BY category;
 
 ---
 
-**작성일:** 2026-01-25
-**버전:** 2.0 (Phase 1-12 통합)
+**작성일:** 2026-01-26
+**버전:** 3.3 (Phase 6.3 RSS 피드 추가, Phase 12 검색엔진 등록 상세화)

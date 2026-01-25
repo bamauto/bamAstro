@@ -21,6 +21,8 @@ jobs:
             "best-karaoke.com"      # 동탄
             "public-karaoke.net"    # 인계동
             "public-karaoke.com"    # 수원
+            "korea-karaoke.com"     # 평택
+            "nextkaraoke.com"       # 안양
           )
 
           for domain in "${DOMAINS[@]}"; do

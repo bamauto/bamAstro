@@ -1,0 +1,136 @@
+---
+export const prerender = true;
+import { PageLayout, LocalBusinessSchema, FAQSchema } from '@bamastro/ui';
+import { region } from '@/config/region';
+import { Phone, MapPin, Train, Clock, Sparkles, CheckCircle } from 'lucide-astro';
+
+const seoProps = {
+  title: `고덕신도시 유흥 완벽 가이드 2026 | 프리미엄 베스트 추천`,
+  description: `고덕신도시 유흥 완벽 가이드 - 프리미엄 가라오케·하이퍼블릭·룸살롱 베스트 업소. 전문가 추천, 빠른 예약, VIP 대우. 지금 상담하세요.`,
+  keywords: ['고덕신도시 유흥', '고덕 가라오케', '고덕 하이퍼블릭', '평택지제역 유흥', '고덕국제신도시', '고덕 예약'],
+};
+
+const areaFaq = [
+    {
+        question: "고덕신도시에서 픽업 가능한가요?",
+        answer: "네, SRT 평택지제역 및 고덕신도시 주요 지점 픽업 가능합니다. 예약 시 위치를 말씀해 주세요."
+    },
+    {
+        question: "고덕신도시 업소들은 언제까지 영업하나요?",
+        answer: "대부분 새벽 5시까지 영업합니다. 신도시 특성상 깔끔한 마감을 선호하는 업소가 많습니다."
+    },
+    {
+        question: "주차 가능한 곳이 있나요?",
+        answer: "대형 쇼핑몰 주차장 및 업소 제휴 주차장 이용 가능합니다. 예약 시 문의해 주세요."
+    }
+];
+
+const venueTypes = [
+    { name: '가라오케', color: 'purple', link: `/${region.id}-karaoke-guide` },
+    { name: '하이퍼블릭', color: 'amber', link: `/${region.id}-highpublic-guide` },
+    { name: '룸살롱', color: 'emerald', link: `/${region.id}-room-salon-guide` },
+    { name: '셔츠룸', color: 'blue', link: `/${region.id}-shirtsroom-guide` },
+];
+---
+
+<PageLayout {...seoProps} region={region}>
+    <LocalBusinessSchema region={region} />
+    <FAQSchema questions={areaFaq} />
+
+    <div class="pt-24 md:pt-32 min-h-screen bg-transparent px-4 pb-20">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <div class="flex justify-center mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                        <Train class="text-purple-400" size={24} />
+                    </div>
+                </div>
+                <span class="text-purple-400 font-bold tracking-[0.2em] text-sm uppercase mb-3 block">지역 가이드</span>
+                <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6">
+                    고덕신도시 유흥 완벽 가이드
+                </h1>
+                <p class="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+                    평택의 신흥 프리미엄 상권 <strong class="text-purple-400">고덕국제신도시</strong>. SRT역세권의 최신 시설 유흥.
+                </p>
+            </div>
+
+            <!-- Area Info -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 text-center">
+                    <MapPin class="text-purple-400 mx-auto mb-3" size={32} />
+                    <h3 class="text-lg font-bold text-white mb-2">위치</h3>
+                    <p class="text-slate-400">SRT 평택지제역<br />고덕국제신도시</p>
+                </div>
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 text-center">
+                    <Clock class="text-purple-400 mx-auto mb-3" size={32} />
+                    <h3 class="text-lg font-bold text-white mb-2">영업시간</h3>
+                    <p class="text-slate-400">저녁 6시 ~ 새벽 5시<br />(업소별 상이)</p>
+                </div>
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 text-center">
+                    <Sparkles class="text-purple-400 mx-auto mb-3" size={32} />
+                    <h3 class="text-lg font-bold text-white mb-2">특징</h3>
+                    <p class="text-slate-400">신도시 프리미엄<br />최신 시설</p>
+                </div>
+            </div>
+
+            <!-- Area Description -->
+            <div class="bg-slate-900/30 p-8 rounded-2xl border border-slate-800/50 mb-16">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <div class="w-1.5 h-8 bg-purple-500 rounded-full"></div>
+                    고덕국제신도시 소개
+                </h2>
+                <div class="text-slate-300 leading-relaxed text-lg font-light space-y-4">
+                    <p>
+                        <strong class="text-white">고덕국제신도시</strong>는 평택의 신흥 프리미엄 상권으로, SRT 평택지제역을 중심으로 빠르게 성장하고 있습니다.
+                        서울 수서역까지 30분, 부산까지 2시간의 우수한 접근성을 자랑합니다.
+                    </p>
+                    <p>
+                        특히 <strong class="text-purple-400">최신 시설의 하이엔드 업소</strong>들이 새롭게 오픈하고 있어, 분당·강남급 품격의 서비스를 평택 가격대에서 즐길 수 있습니다.
+                        삼성전자 평택캠퍼스 임직원들의 비즈니스 접대 장소로 인기가 높습니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Available Venues -->
+            <div class="mb-16">
+                <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                    <div class="w-1.5 h-8 bg-purple-500 rounded-full"></div>
+                    고덕신도시 추천 업종
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {venueTypes.map((venue) => (
+                        <a href={venue.link} class={`bg-slate-900/50 p-6 rounded-2xl border border-slate-800 hover:border-${venue.color}-500/50 transition-all text-center group`}>
+                            <h3 class={`text-lg font-bold text-${venue.color}-400 mb-2 group-hover:scale-105 transition-transform`}>{venue.name}</h3>
+                            <p class="text-slate-400 text-sm">가이드 보기 →</p>
+                        </a>
+                    ))}
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="mb-16">
+                <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                    <div class="w-1.5 h-8 bg-purple-500 rounded-full"></div>
+                    자주 묻는 질문
+                </h2>
+                <div class="grid gap-6">
+                    {areaFaq.map((item) => (
+                        <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800">
+                            <h3 class="text-lg font-bold text-purple-400 mb-3">Q. {item.question}</h3>
+                            <p class="text-slate-300">A. {item.answer}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="bg-gradient-to-r from-purple-800 to-fuchsia-800 rounded-3xl p-10 text-center">
+                <h2 class="text-3xl font-extrabold text-white mb-4">고덕신도시에서 어디가 좋을지 모르겠다면?</h2>
+                <p class="text-slate-200 mb-8">서우실장이 상황에 맞는 최적의 업소를 추천해 드립니다.</p>
+                <button onclick={`window.location.href = 'tel:${region.phone}'`} class="bg-white text-slate-900 font-bold py-4 px-12 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center gap-2 mx-auto">
+                    <Phone fill="currentColor" size={20} /> {region.phone} 맞춤 상담
+                </button>
+            </div>
+        </div>
+    </div>
+</PageLayout>

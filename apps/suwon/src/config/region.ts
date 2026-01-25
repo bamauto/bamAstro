@@ -148,9 +148,9 @@ export const region: RegionConfig = {
             '수원 기모노룸',
             '수원 호빠'
         ],
-        description: '수원역·팔달문 최고급 가라오케·하이퍼블릭 가이드. 가격·추천·예약·팁. 회식·데이트·접대 완벽 안내.',
-        naverVerification: 'YOUR_NAVER_VERIFICATION_CODE',
-        googleVerification: 'YOUR_GOOGLE_VERIFICATION_CODE',
+        description: '수원역·팔달문·인계동 최고급 가라오케·하이퍼블릭 완벽 가이드. 2026년 최신 가격, 추천 업소, 예약 팁 총정리. 회식·데이트·비즈니스 접대 전문. 서우실장 24시간 무료 상담.',
+        naverVerification: '',
+        googleVerification: '',
         longTailKeywords: [
             "수원역 로데오거리 유흥",
             "팔달문 가라오케 예약",

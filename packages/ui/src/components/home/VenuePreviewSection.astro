@@ -36,7 +36,9 @@ const venues = region.venueTypes.map(v => ({
             >
                 {/* Background Image */}
                 <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                    style={`background-image: url('${venue.img || '/images/pattern.svg'}')`}>
+                    style={`background-image: url('${venue.img || '/images/pattern.svg'}')`}
+                    role="img"
+                    aria-label={`${region.name} ${venue.name} 이미지`}>
                 </div>
 
                 {/* Overlay */}

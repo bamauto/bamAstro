@@ -1,0 +1,136 @@
+---
+export const prerender = true;
+import { PageLayout, LocalBusinessSchema, FAQSchema } from '@bamastro/ui';
+import { region } from '@/config/region';
+import { Phone, MapPin, Train, Clock, Sparkles, CheckCircle } from 'lucide-astro';
+
+const seoProps = {
+  title: `송탄 유흥 완벽 가이드 2026 | 지산동 베스트 추천`,
+  description: `송탄 유흥 완벽 가이드 - 지산동 가라오케·하이퍼블릭·룸살롱 베스트 업소. 전문가 추천, 빠른 예약, VIP 대우. 지금 상담하세요.`,
+  keywords: ['송탄 유흥', '송탄 가라오케', '송탄 하이퍼블릭', '지산동 유흥', '평택 송탄', '송탄 예약'],
+};
+
+const areaFaq = [
+    {
+        question: "송탄에서 픽업 가능한가요?",
+        answer: "네, 송탄역 및 지산동 주요 지점 픽업 가능합니다. 예약 시 위치를 말씀해 주세요."
+    },
+    {
+        question: "송탄 지산동 업소들은 언제까지 영업하나요?",
+        answer: "대부분 24시간 운영합니다. 삼성전자 교대근무 직원 맞춤 서비스를 제공합니다."
+    },
+    {
+        question: "주차 가능한 곳이 있나요?",
+        answer: "업소 전용 주차장 및 인근 공영주차장 이용 가능합니다. 예약 시 문의해 주세요."
+    }
+];
+
+const venueTypes = [
+    { name: '가라오케', color: 'purple', link: `/${region.id}-karaoke-guide` },
+    { name: '하이퍼블릭', color: 'amber', link: `/${region.id}-highpublic-guide` },
+    { name: '룸살롱', color: 'emerald', link: `/${region.id}-room-salon-guide` },
+    { name: '셔츠룸', color: 'blue', link: `/${region.id}-shirtsroom-guide` },
+];
+---
+
+<PageLayout {...seoProps} region={region}>
+    <LocalBusinessSchema region={region} />
+    <FAQSchema questions={areaFaq} />
+
+    <div class="pt-24 md:pt-32 min-h-screen bg-transparent px-4 pb-20">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <div class="flex justify-center mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                        <Train class="text-purple-400" size={24} />
+                    </div>
+                </div>
+                <span class="text-purple-400 font-bold tracking-[0.2em] text-sm uppercase mb-3 block">지역 가이드</span>
+                <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6">
+                    송탄 유흥 완벽 가이드
+                </h1>
+                <p class="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+                    평택의 전통 유흥가 <strong class="text-purple-400">송탄 지산동</strong>. 오랜 역사와 가성비를 자랑하는 유흥 문화.
+                </p>
+            </div>
+
+            <!-- Area Info -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 text-center">
+                    <MapPin class="text-purple-400 mx-auto mb-3" size={32} />
+                    <h3 class="text-lg font-bold text-white mb-2">위치</h3>
+                    <p class="text-slate-400">1호선 송탄역<br />지산동 유흥가 일대</p>
+                </div>
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 text-center">
+                    <Clock class="text-purple-400 mx-auto mb-3" size={32} />
+                    <h3 class="text-lg font-bold text-white mb-2">영업시간</h3>
+                    <p class="text-slate-400">24시간 운영<br />(업소별 상이)</p>
+                </div>
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 text-center">
+                    <Sparkles class="text-purple-400 mx-auto mb-3" size={32} />
+                    <h3 class="text-lg font-bold text-white mb-2">특징</h3>
+                    <p class="text-slate-400">전통 유흥가<br />가성비 최고</p>
+                </div>
+            </div>
+
+            <!-- Area Description -->
+            <div class="bg-slate-900/30 p-8 rounded-2xl border border-slate-800/50 mb-16">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <div class="w-1.5 h-8 bg-purple-500 rounded-full"></div>
+                    송탄 지산동 소개
+                </h2>
+                <div class="text-slate-300 leading-relaxed text-lg font-light space-y-4">
+                    <p>
+                        <strong class="text-white">송탄 지산동</strong>은 평택의 대표적인 전통 유흥가로, 오랜 역사를 자랑합니다.
+                        미군기지 인근이라 독특한 국제적 분위기와 한국 유흥 문화가 융합된 특색을 지닙니다.
+                    </p>
+                    <p>
+                        특히 <strong class="text-purple-400">합리적인 가격대</strong>와 24시간 운영으로 삼성전자 교대근무 직원들에게 인기가 높습니다.
+                        오랜 경쟁을 통해 서비스 품질이 검증된 업소들이 많아 안심하고 이용할 수 있습니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Available Venues -->
+            <div class="mb-16">
+                <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                    <div class="w-1.5 h-8 bg-purple-500 rounded-full"></div>
+                    송탄 추천 업종
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {venueTypes.map((venue) => (
+                        <a href={venue.link} class={`bg-slate-900/50 p-6 rounded-2xl border border-slate-800 hover:border-${venue.color}-500/50 transition-all text-center group`}>
+                            <h3 class={`text-lg font-bold text-${venue.color}-400 mb-2 group-hover:scale-105 transition-transform`}>{venue.name}</h3>
+                            <p class="text-slate-400 text-sm">가이드 보기 →</p>
+                        </a>
+                    ))}
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="mb-16">
+                <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                    <div class="w-1.5 h-8 bg-purple-500 rounded-full"></div>
+                    자주 묻는 질문
+                </h2>
+                <div class="grid gap-6">
+                    {areaFaq.map((item) => (
+                        <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800">
+                            <h3 class="text-lg font-bold text-purple-400 mb-3">Q. {item.question}</h3>
+                            <p class="text-slate-300">A. {item.answer}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="bg-gradient-to-r from-purple-800 to-fuchsia-800 rounded-3xl p-10 text-center">
+                <h2 class="text-3xl font-extrabold text-white mb-4">송탄에서 어디가 좋을지 모르겠다면?</h2>
+                <p class="text-slate-200 mb-8">서우실장이 상황에 맞는 최적의 업소를 추천해 드립니다.</p>
+                <button onclick={`window.location.href = 'tel:${region.phone}'`} class="bg-white text-slate-900 font-bold py-4 px-12 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center gap-2 mx-auto">
+                    <Phone fill="currentColor" size={20} /> {region.phone} 맞춤 상담
+                </button>
+            </div>
+        </div>
+    </div>
+</PageLayout>
