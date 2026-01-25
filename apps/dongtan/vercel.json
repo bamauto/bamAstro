@@ -1,6 +1,8 @@
 {
-  "installCommand": "pnpm install",
-  "buildCommand": "pnpm build",
+  "framework": null,
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+  "buildCommand": "cd ../.. && pnpm --filter @bamastro/dongtan build",
+  "outputDirectory": "dist",
   "headers": [
     {
       "source": "/(.*)",
