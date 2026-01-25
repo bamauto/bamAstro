@@ -1,0 +1,31 @@
+{
+  "name": "동탄 유흥 가이드 - 서우실장",
+  "short_name": "동탄VIP",
+  "description": "동탄 유흥 가이드 | 동탄역·메타폴리스·센트럴파크 중심 하이퍼블릭·가라오케·셔츠룸 예약",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["entertainment", "lifestyle"],
+  "lang": "ko-KR"
+}
