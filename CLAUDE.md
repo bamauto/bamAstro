@@ -30,7 +30,16 @@
    - `apps/{지역}/public/images/{지역}-highpublic-karaoke-private-room.webp`
    - `apps/{지역}/public/images/venues/*_main.webp` (6개)
 4. **.env 파일 생성**: Supabase 연결 정보 설정
-5. **Vercel 배포 설정**: vercel.json 및 도메인 연결
+5. **vercel.json 빌드 설정 (필수!)**:
+   ```json
+   {
+     "framework": null,
+     "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+     "buildCommand": "cd ../.. && pnpm --filter @bamastro/{지역} build",
+     "headers": [...]
+   }
+   ```
+   > ⚠️ **중요**: 이 설정 없으면 Vercel 빌드 시 `astro: command not found` 에러 발생
 6. **pnpm-lock.yaml 업데이트 및 커밋**: 새 지역 추가 후 반드시 실행
    ```bash
    pnpm install --no-frozen-lockfile

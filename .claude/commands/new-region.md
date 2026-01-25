@@ -213,16 +213,48 @@ pnpm --filter @bamastro/[지역영문명] dev
 
 ## Phase 8: Vercel 배포 설정
 
-### 8.1 vercel.json 필수 설정
+### 8.1 vercel.json 필수 설정 (매우 중요!)
+
+> ⚠️ **중요**: 이 설정 없으면 Vercel 빌드 시 `astro: command not found` 에러 발생!
+
+**파일 위치**: `apps/[지역영문명]/vercel.json`
 
 ```json
 {
   "framework": null,
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "buildCommand": "cd ../.. && pnpm --filter @bamastro/[지역영문명] build",
-  "outputDirectory": "dist"
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        }
+      ]
+    },
+    {
+      "source": "/images/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
 }
 ```
+
+**핵심 설정**:
+- `framework: null` - Vercel의 자동 감지 비활성화
+- `installCommand` - 루트에서 pnpm workspace 설치
+- `buildCommand` - 특정 앱만 빌드 (monorepo 구조)
 
 ### 8.2 Vercel 프로젝트 생성
 
