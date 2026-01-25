@@ -1,4 +1,4 @@
-# 강남(Gangnam) 유흥 사이트 메타 태그 SEO 최적화 분석
+/# 강남(Gangnam) 유흥 사이트 메타 태그 SEO 최적화 분석
 ## high-karaoke.com
 
 **분석 날짜**: 2026년 1월 24일
