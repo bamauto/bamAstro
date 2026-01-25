@@ -1121,61 +1121,104 @@ Task tool → subagent_type: "seo-technical-optimization:seo-meta-optimizer"
 
 ---
 
-## Phase 18: 블로그 포스트 생성 및 스케줄링
+## Phase 18: 블로그 포스트 생성 (기존 지역 복사 방식)
 
-> **중요:** 신규 지역 추가 시 블로그 콘텐츠를 자동 생성하여 SEO 효과 및 사용자 참여도를 높입니다.
+> **⚠️ 중요:** 블로그 포스트는 **직접 생성하지 않고**, 기존 지역(분당 등)에서 복사 후 **지역명 치환 + 발행일 셔플** 방식으로 생성합니다.
 
-**목적:** 기존 블로그 포스트를 복사하여 지역명만 변경, 스케줄링 설정, 이미지 자동 배정
-
----
-
-### 18.1 사전 확인
-
-- [ ] Supabase 접속 정보 확인
-  - URL: `https://rrzeapykmyrsiqmkwjcf.supabase.co`
-  - API Key 보유 여부 확인
-
-- [ ] 소스 지역 블로그 포스트 존재 확인
-  ```sql
-  SELECT COUNT(*) FROM bamastro_blog_posts WHERE region = 'bundang';
-  ```
-  - 예상 결과: 700개 이상
-
-- [ ] 이미지 파일 존재 확인
-  - Supabase Storage → `bamastro-blog` 버킷
-  - `blog-images/shared/` 폴더 확인
-  - 최소 30개 이상의 이미지 필요
+**목적:** 기존 블로그 포스트를 복사하여 지역명 치환, 발행일 랜덤 셔플로 중복 방지
 
 ---
 
-### 18.2 스크립트 실행
+### 18.1 Supabase MCP로 SQL 실행 (권장)
 
-#### 18.2.1 미리보기 모드 (테스트)
+**mcp__supabase__execute_sql** 도구를 사용하여 직접 SQL 실행:
 
-```bash
-cd /Users/deneb/bamAstro
-NEW_REGION=suwon npx tsx scripts/copy-blog-posts-for-new-region.ts
+```sql
+-- 기존 지역(bundang)에서 복사하여 새 지역 포스트 생성
+-- [신규지역영문], [신규지역한글], [기존지역영문], [기존지역한글] 치환 필요
+
+INSERT INTO bamastro_blog_posts (
+  title, slug, excerpt, content, category,
+  read_time, featured, gradient, status, region, published_at
+)
+SELECT
+  -- 제목: 기존 지역명 → 신규 지역명 치환
+  REPLACE(REPLACE(title, '[기존지역한글]', '[신규지역한글]'), '[기존지역영문]', '[신규지역영문]'),
+  -- 슬러그: 지역명 치환 + 랜덤 suffix로 중복 방지
+  REPLACE(slug, '[기존지역영문]', '[신규지역영문]') || '-' || SUBSTRING(gen_random_uuid()::text, 1, 6),
+  -- 요약: 지역명 치환
+  REPLACE(REPLACE(excerpt, '[기존지역한글]', '[신규지역한글]'), '[기존지역영문]', '[신규지역영문]'),
+  -- 본문: 지역명 치환
+  REPLACE(REPLACE(content, '[기존지역한글]', '[신규지역한글]'), '[기존지역영문]', '[신규지역영문]'),
+  category,
+  read_time,
+  featured,
+  gradient,
+  'published',
+  '[신규지역영문]',  -- 새 지역 region 값
+  -- 발행일: 랜덤 오프셋으로 셔플 효과 (1~60일 전 랜덤)
+  NOW() - (FLOOR(RANDOM() * 60) + 1) * INTERVAL '1 day'
+FROM bamastro_blog_posts
+WHERE region = '[기존지역영문]'
+  AND status = 'published';
 ```
 
-**확인 사항:**
-- [ ] 소스 지역 포스트 조회 성공
-- [ ] 카테고리별 포스트 수 확인
-- [ ] 이미지 목록 조회 성공
-- [ ] 스케줄 미리보기 확인 (처음 12개)
-- [ ] 에러 없이 완료
+---
 
-#### 18.2.2 실제 적용 (프로덕션)
+### 18.2 예시: 분당 → 동탄 복사
 
-```bash
-cd /Users/deneb/bamAstro
-NEW_REGION=suwon APPLY=true npx tsx scripts/copy-blog-posts-for-new-region.ts
+```sql
+INSERT INTO bamastro_blog_posts (
+  title, slug, excerpt, content, category,
+  read_time, featured, gradient, status, region, published_at
+)
+SELECT
+  REPLACE(REPLACE(title, '분당', '동탄'), 'bundang', 'dongtan'),
+  REPLACE(slug, 'bundang', 'dongtan') || '-' || SUBSTRING(gen_random_uuid()::text, 1, 6),
+  REPLACE(REPLACE(excerpt, '분당', '동탄'), 'bundang', 'dongtan'),
+  REPLACE(REPLACE(content, '분당', '동탄'), 'bundang', 'dongtan'),
+  category, read_time, featured, gradient,
+  'published', 'dongtan',
+  NOW() - (FLOOR(RANDOM() * 60) + 1) * INTERVAL '1 day'
+FROM bamastro_blog_posts
+WHERE region = 'bundang' AND status = 'published';
 ```
 
-**확인 사항:**
-- [ ] 데이터베이스 삽입 시작 메시지 확인
-- [ ] 진행률 표시 확인 (10개씩)
-- [ ] 성공 카운트 확인
-- [ ] 에러 없이 완료
+**지역명 매핑:**
+| 영문 | 한글 |
+|------|------|
+| bundang | 분당 |
+| gangnam | 강남 |
+| suwon | 수원 |
+| ingedong | 인계동 |
+| dongtan | 동탄 |
+
+---
+
+### 18.3 복사 후 확인
+
+```sql
+-- 1. 신규 지역 포스트 수 확인
+SELECT COUNT(*) FROM bamastro_blog_posts WHERE region = '[신규지역영문]';
+
+-- 2. 카테고리별 분포 확인
+SELECT category, COUNT(*)
+FROM bamastro_blog_posts
+WHERE region = '[신규지역영문]'
+GROUP BY category;
+
+-- 3. 샘플 포스트 확인
+SELECT title, category, published_at
+FROM bamastro_blog_posts
+WHERE region = '[신규지역영문]'
+ORDER BY published_at DESC
+LIMIT 10;
+```
+
+**체크리스트:**
+- [ ] 총 포스트 수 = 소스 지역과 동일 (1000개 이상)
+- [ ] 각 카테고리별 포스트 수 균등 (180개 내외)
+- [ ] 지역명이 올바르게 치환되었는지 확인
 
 ---
 
