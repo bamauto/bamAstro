@@ -22,21 +22,25 @@ function formatDate(dateString: string): string {
   return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-// Ensure post title is not too long for SEO
-const postTitle = post.title.length > 50 ? post.title.substring(0, 50) + '...' : post.title;
-// Ensure excerpt is optimal length (120-160 chars)
-const optimizedExcerpt = post.excerpt.length > 160
-  ? post.excerpt.substring(0, 157) + '...'
+// SEO 최적화: 블로그 상세 (Title 50-58자, Description 150-160자)
+const postTitle = post.title.length > 40 ? post.title.substring(0, 37) + '...' : post.title;
+const fullTitle = `${postTitle} | ${region.name} 유흥 가이드`;
+
+const optimizedExcerpt = post.excerpt.length > 155
+  ? post.excerpt.substring(0, 152) + '...'
+  : post.excerpt.length < 120
+  ? `${post.excerpt} ${region.name} 유흥 전문 정보 - 서우실장 가이드.`
   : post.excerpt;
 
 const seoProps = {
-  title: `${postTitle} | ${region.seo.mainKeyword}`,
+  title: fullTitle,
   description: optimizedExcerpt,
   keywords: [
     region.seo.mainKeyword,
-    ...region.seo.mainKeywords.slice(0, 2),
+    ...region.seo.mainKeywords.slice(0, 3),
     post.category,
     `${region.name} ${post.category}`,
+    `${region.name} 유흥 가이드`,
   ],
   ogType: 'article' as const,
   datePublished: post.published_at || post.created_at,

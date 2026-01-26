@@ -49,8 +49,8 @@ function getPageNumbers(current: number, total: number): (number | '...')[] {
 const pageNumbers = getPageNumbers(currentPage, totalPages);
 
 const seoProps = {
-  title: `${region.name} 유흥 인사이더 팁 & 최신 트렌드 가이드`,
-  description: `${region.name} 유흥 이용자 필독! 15년 경험의 인사이더 팁, 프로 에티켓 가이드, 2026 트렌드 리포트. 가라오케·하이퍼블릭·셔츠룸 완벽 정보.`,
+  title: region.seo.blogListTitle || `${region.name} 유흥 가이드 블로그 | 프로 팁·에티켓·2026 트렌드 | 서우실장`,
+  description: region.seo.blogListDescription || `${region.name} 유흥 전문가가 알려주는 실전 팁과 에티켓. 15년 경력 서우실장의 인사이더 정보, 가라오케·하이퍼블릭 이용 가이드, 2026 최신 트렌드 총정리.`,
   keywords: [`${region.name} 유흥 가이드`, `${region.name} 유흥 팁`, `${region.name} 유흥 정보`, `${region.name} 에티켓`, ...region.seo.mainKeywords],
 };
 ---

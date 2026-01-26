@@ -71,71 +71,95 @@ const venues = region.venueTypes.map(v => ({
 </section>
 
 <script>
-    const cards = document.querySelectorAll('.venue-card');
-    
-    // Set first card active by default on desktop init (optional, or none)
-    if (cards.length > 0) {
-        setActive(cards[0]);
+    // Lazy initialization with IntersectionObserver for INP improvement
+    const accordion = document.getElementById('venue-accordion');
+    let venueInitialized = false;
+
+    function initVenueAccordion() {
+        if (venueInitialized) return;
+        venueInitialized = true;
+
+        const cards = document.querySelectorAll('.venue-card');
+
+        // Set first card active by default on desktop init
+        if (cards.length > 0 && window.innerWidth >= 1024) {
+            setActive(cards[0]);
+        }
+
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                if (window.innerWidth >= 1024) {
+                    setActive(card);
+                }
+            }, { passive: true });
+        });
+
+        function setActive(activeCard: Element) {
+            cards.forEach(card => {
+                const isTarget = card === activeCard;
+
+                // Flex grow
+                if (isTarget) {
+                    card.classList.remove('lg:flex-[1]');
+                    card.classList.add('lg:flex-[3]');
+                } else {
+                    card.classList.remove('lg:flex-[3]');
+                    card.classList.add('lg:flex-[1]');
+                }
+
+                // Subtitle animation
+                const sub = card.querySelector('.venue-sub');
+                if (isTarget) {
+                     sub?.classList.remove('lg:opacity-0', 'lg:translate-y-4');
+                     sub?.classList.add('opacity-100', 'translate-y-0');
+                } else {
+                     sub?.classList.add('lg:opacity-0', 'lg:translate-y-4');
+                }
+
+                // Title animation
+                const title = card.querySelector('.venue-title');
+                if (isTarget) {
+                    title?.classList.remove('lg:rotate-[-90deg]', 'lg:origin-bottom-left', 'lg:absolute', 'lg:bottom-12', 'lg:left-8', 'lg:w-[300px]', 'lg:text-3xl');
+                    title?.classList.add('text-4xl', 'mb-4');
+                } else {
+                    title?.classList.add('lg:rotate-[-90deg]', 'lg:origin-bottom-left', 'lg:absolute', 'lg:bottom-12', 'lg:left-8', 'lg:w-[300px]', 'lg:text-3xl');
+                    title?.classList.remove('text-4xl', 'mb-4');
+                }
+
+                // Details animation
+                const details = card.querySelector('.venue-details');
+                if (isTarget) {
+                    details?.classList.remove('lg:max-h-0', 'lg:opacity-0');
+                    details?.classList.add('max-h-[200px]', 'opacity-100');
+                } else {
+                    details?.classList.add('lg:max-h-0', 'lg:opacity-0');
+                }
+
+                // Overlay opacity
+                const overlay = card.querySelector('.venue-overlay');
+                if (isTarget) {
+                    overlay?.classList.remove('opacity-70');
+                    overlay?.classList.add('opacity-90');
+                } else {
+                    overlay?.classList.add('opacity-70');
+                    overlay?.classList.remove('opacity-90');
+                }
+            });
+        }
     }
 
-    cards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            if (window.innerWidth >= 1024) { // Only desktop hover effect
-                setActive(card);
+    // Use IntersectionObserver to delay initialization
+    if (accordion && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                initVenueAccordion();
+                observer.disconnect();
             }
-        });
-    });
+        }, { rootMargin: '200px' });
 
-    function setActive(activeCard: Element) {
-        cards.forEach(card => {
-            const isTarget = card === activeCard;
-            
-            // Flex grow
-            if (isTarget) {
-                card.classList.remove('lg:flex-[1]');
-                card.classList.add('lg:flex-[3]');
-            } else {
-                card.classList.remove('lg:flex-[3]');
-                card.classList.add('lg:flex-[1]');
-            }
-            
-            // Subtitle animation
-            const sub = card.querySelector('.venue-sub');
-            if (isTarget) {
-                 sub?.classList.remove('lg:opacity-0', 'lg:translate-y-4');
-                 sub?.classList.add('opacity-100', 'translate-y-0');
-            } else {
-                 sub?.classList.add('lg:opacity-0', 'lg:translate-y-4');
-            }
-            
-            // Title animation
-            const title = card.querySelector('.venue-title');
-            if (isTarget) {
-                title?.classList.remove('lg:rotate-[-90deg]', 'lg:origin-bottom-left', 'lg:absolute', 'lg:bottom-12', 'lg:left-8', 'lg:w-[300px]', 'lg:text-3xl');
-                title?.classList.add('text-4xl', 'mb-4');
-            } else {
-                title?.classList.add('lg:rotate-[-90deg]', 'lg:origin-bottom-left', 'lg:absolute', 'lg:bottom-12', 'lg:left-8', 'lg:w-[300px]', 'lg:text-3xl');
-                title?.classList.remove('text-4xl', 'mb-4');
-            }
-            
-            // Details animation
-            const details = card.querySelector('.venue-details');
-            if (isTarget) {
-                details?.classList.remove('lg:max-h-0', 'lg:opacity-0');
-                details?.classList.add('max-h-[200px]', 'opacity-100');
-            } else {
-                details?.classList.add('lg:max-h-0', 'lg:opacity-0');
-            }
-            
-            // Overlay opacity
-            const overlay = card.querySelector('.venue-overlay');
-            if (isTarget) {
-                overlay?.classList.remove('opacity-70');
-                overlay?.classList.add('opacity-90');
-            } else {
-                overlay?.classList.add('opacity-70');
-                overlay?.classList.remove('opacity-90');
-            }
-        });
+        observer.observe(accordion);
+    } else if (accordion) {
+        // Fallback for older browsers
+        initVenueAccordion();
     }
 </script>

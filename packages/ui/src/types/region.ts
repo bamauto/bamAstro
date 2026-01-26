@@ -29,6 +29,14 @@ export interface RegionConfig {
         description: string;
         naverVerification?: string;
         googleVerification?: string;
+        // SEO 최적화 메타 태그 (2026 개선)
+        homeTitle?: string;         // 홈페이지 title (50-60자)
+        homeDescription?: string;   // 홈페이지 description (150-160자)
+        blogListTitle?: string;     // 블로그 목록 title
+        blogListDescription?: string; // 블로그 목록 description
+        // 롱테일 키워드
+        longTailKeywords?: string[];
+        locationKeywords?: string[];
     };
     pricing: {
         minRoomCharge: number;

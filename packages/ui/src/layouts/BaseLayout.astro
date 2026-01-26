@@ -58,10 +58,29 @@ const props = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <SEO {...props} />
 
-    <!-- Premium Fonts: Pretendard -->
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-    
+    <!-- Premium Fonts: Pretendard - Async loading for FCP improvement -->
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    </noscript>
+
     <style>
+      /* Critical font-face for immediate rendering */
+      @font-face {
+        font-family: 'Pretendard Variable';
+        src: url('https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/woff2/PretendardVariable.woff2') format('woff2');
+        font-weight: 45 920;
+        font-style: normal;
+        font-display: swap;
+      }
+
       body {
         font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
       }
@@ -69,17 +88,16 @@ const props = Astro.props;
     <slot name="head" />
   </head>
   <body class="bg-slate-950 text-slate-50 min-h-screen selection:bg-indigo-500/30 selection:text-indigo-200">
-    <!-- Background Gradients -->
-    <!-- Background Gradients & Patterns -->
-    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-      <!-- Dynamic Orbs - Increased Vibrancy -->
-      <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-600/30 blur-[120px] animate-float"></div>
-      <div class="absolute top-[20%] right-[-10%] w-[40%] h-[40%] rounded-full bg-fuchsia-600/20 blur-[100px] animate-float-delayed"></div>
-      <div class="absolute bottom-[-10%] left-[20%] w-[50%] h-[50%] rounded-full bg-violet-600/20 blur-[100px] animate-pulse-slow"></div>
-      
+    <!-- Background Gradients & Patterns - Optimized for performance -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none background-container">
+      <!-- Dynamic Orbs - Reduced blur for better performance (120px -> 60px) -->
+      <div class="background-orb absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-600/30 blur-[60px] animate-float will-change-transform"></div>
+      <div class="background-orb absolute top-[20%] right-[-10%] w-[40%] h-[40%] rounded-full bg-fuchsia-600/20 blur-[50px] animate-float-delayed will-change-transform"></div>
+      <div class="background-orb absolute bottom-[-10%] left-[20%] w-[50%] h-[50%] rounded-full bg-violet-600/20 blur-[50px] animate-pulse-slow will-change-transform"></div>
+
       <!-- Grid Pattern -->
       <div class="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.05]"></div>
-      
+
       <!-- Subtle gradient overlay for texture -->
       <div class="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/5 to-transparent opacity-50"></div>
     </div>

@@ -192,3 +192,66 @@
 .animate-wiggle {
     animation: wiggle 1s ease-in-out infinite;
 }
+
+/* Performance Optimizations */
+.background-orb {
+    contain: strict;
+    will-change: transform;
+}
+
+.background-container {
+    contain: layout style;
+}
+
+/* Mobile Performance: Disable heavy animations on small screens */
+@media (max-width: 768px) {
+    .background-orb {
+        animation: none !important;
+    }
+
+    .animate-float,
+    .animate-float-delayed,
+    .animate-pulse-slow {
+        animation: none !important;
+    }
+
+    /* Reduce blur on mobile for better performance */
+    .background-orb {
+        filter: blur(30px) !important;
+    }
+}
+
+/* Accessibility: Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .animate-float,
+    .animate-float-delayed,
+    .animate-pulse-slow,
+    .animate-fade-in,
+    .animate-fade-in-up,
+    .animate-fade-in-down,
+    .animate-infinite-scroll,
+    .animate-wiggle {
+        animation: none !important;
+    }
+
+    .glass-card,
+    .btn-primary,
+    .btn-secondary {
+        transition: none !important;
+    }
+
+    .glass-card::after,
+    .btn-primary::before {
+        display: none !important;
+    }
+}
+
+/* Touch Target Optimization: Ensure minimum 48px touch targets */
+@media (pointer: coarse) {
+    button,
+    a,
+    [role="button"] {
+        min-height: 48px;
+        min-width: 48px;
+    }
+}

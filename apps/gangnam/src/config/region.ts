@@ -149,11 +149,14 @@ export const region: RegionConfig = {
             '강남 호빠'
         ],
         description: '강남역·역삼역 최고급 가라오케·하이퍼블릭 완벽 가이드. 2026년 최신 가격, 추천 업소, 예약 팁 총정리. 회식·데이트·비즈니스 접대 전문. 서우실장 24시간 무료 상담.',
+        // SEO 최적화 메타 태그 (50-60자 Title, 150-160자 Description)
+        homeTitle: '강남 유흥 완벽 가이드 | 가라오케·하이퍼블릭·셔츠룸 추천 | 서우실장',
+        homeDescription: '강남역·역삼역 최고급 가라오케·하이퍼블릭 완벽 가이드. 2026년 최신 가격, 프로 에티켓, 추천 업소 총정리. 회식·데이트·비즈니스 전문. ★ 서우실장 무료 상담',
+        blogListTitle: '강남 유흥 가이드 블로그 | 프로 팁·에티켓·2026 트렌드 | 서우실장',
+        blogListDescription: '강남 유흥 전문가가 알려주는 실전 팁과 에티켓. 15년 경력 서우실장의 인사이더 정보, 가라오케·하이퍼블릭 이용 가이드, 2026 최신 트렌드 총정리.',
         // TODO: 실제 검증 코드로 교체 필요
-        // 네이버 웹마스터 도구: https://searchadvisor.naver.com/ → 사이트 등록 → HTML 태그 인증
-        // 구글 서치 콘솔: https://search.google.com/search-console → 속성 추가 → HTML 태그 인증
-        naverVerification: '', // 네이버 서치어드바이저 HTML 태그 content 값 입력
-        googleVerification: '', // 구글 서치 콘솔 HTML 태그 content 값 입력
+        naverVerification: '',
+        googleVerification: '',
         // 롱테일 키워드 (Long-tail Keywords) - SEO 에이전트 분석 기반 확장
         longTailKeywords: [
             // 가격/예약 관련
@@ -220,7 +223,7 @@ export const region: RegionConfig = {
             name: '하이퍼블릭',
             slug: 'gangnam-highpublic-guide',
             subtitle: '프라이빗 / 시크릿',
-            description: '강남역 중심 프라이빗 라운지',
+            description: '강남역 테헤란로 대기업 임원들의 비즈니스 접대 1순위. 매직미러 초이스와 완벽한 프라이빗 룸에서 품격 있는 시간을 보내세요.',
             image: '/images/venues/hyperpublic_main.webp',
             minPrice: 200000,
             keywords: ['강남 하이퍼블릭', '강남역 하이퍼블릭'],
@@ -230,7 +233,7 @@ export const region: RegionConfig = {
             name: '가라오케',
             slug: 'gangnam-karaoke-guide',
             subtitle: '프리미엄 가라오케',
-            description: '최신 음향 시설과 럭셔리 룸에서 즐기는 파티',
+            description: '최신 JBL 음향과 하만카돈 시스템을 장착한 럭셔리 룸. 역삼역 인근 대형 파티룸은 20인 이상 회식에 최적화되어 있습니다.',
             image: '/images/venues/karaoke_main.webp',
             minPrice: 180000,
             keywords: ['강남 가라오케', '강남역 노래방'],
@@ -240,7 +243,7 @@ export const region: RegionConfig = {
             name: '셔츠룸',
             slug: 'gangnam-shirtsroom-guide',
             subtitle: '캐주얼 라운지',
-            description: '편안한 분위기에서 즐기는 캐주얼 비즈니스 클럽',
+            description: '2030 직장인을 위한 캐주얼 비즈니스 라운지. 부담 없는 가격에 신논현역 인근 트렌디한 분위기에서 편안하게 즐기세요.',
             image: '/images/venues/shirtsroom_main.webp',
             minPrice: 180000,
             keywords: ['강남 셔츠룸', '역삼동 셔츠룸'],
@@ -250,7 +253,7 @@ export const region: RegionConfig = {
             name: '기모노룸',
             slug: 'gangnam-kimono-room-guide',
             subtitle: '이색 체험',
-            description: '이국적인 테마와 특별한 경험을 선사하는 공간',
+            description: '일본식 정통 서비스와 이국적인 인테리어. 해외 바이어 접대나 특별한 날 색다른 경험을 원하시는 분께 추천합니다.',
             image: '/images/venues/kimono_main.webp',
             minPrice: 250000,
             keywords: ['강남 기모노룸', '이색 테마'],
@@ -260,7 +263,7 @@ export const region: RegionConfig = {
             name: '룸살롱',
             slug: 'gangnam-room-salon-guide',
             subtitle: '하이엔드 비즈니스',
-            description: '성공적인 비즈니스를 위한 격조 높은 공간',
+            description: '대한민국 유흥업계 최정상. 청담동·논현동 고급 업소는 재계 인사와 VIP 고객을 위한 격조 높은 비즈니스 공간입니다.',
             image: '/images/venues/roomsalon_main.webp',
             minPrice: 300000,
             keywords: ['강남 룸싸롱', '강남 비즈니스'],
@@ -270,7 +273,7 @@ export const region: RegionConfig = {
             name: '호빠',
             slug: 'gangnam-hostbar-guide',
             subtitle: '여성 전용',
-            description: '여성 고객만을 위한 프라이빗 엔터테인먼트',
+            description: '청담동·압구정 여성 고객 전용 프라이빗 라운지. 연예인급 외모의 전문 호스트가 특별한 밤을 선물합니다.',
             image: '/images/venues/hostbar_main.webp',
             minPrice: 180000,
             keywords: ['강남 호빠', '강남 호스트바'],

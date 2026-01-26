@@ -18,6 +18,8 @@ export { default as AnalysisSection } from './src/components/home/AnalysisSectio
 export { default as HotEventSection } from './src/components/home/HotEventSection.astro';
 export { default as VenuePreviewSection } from './src/components/home/VenuePreviewSection.astro';
 export { default as BlogSection } from './src/components/home/BlogSection.astro';
+export { default as FAQSection } from './src/components/home/FAQSection.astro';
+export { default as GuideSection } from './src/components/home/GuideSection.astro';
 export { default as VenueCard } from './src/components/guide/VenueCard.astro';
 export { default as TableOfContents } from './src/components/common/TableOfContents.astro';
 export { default as RelatedServices } from './src/components/common/RelatedServices.astro';

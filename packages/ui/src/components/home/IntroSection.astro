@@ -48,6 +48,9 @@ const imageName = region?.id ? `${region.id}-highpublic-karaoke-private-room.web
             src={`/images/${imageName}`}
             alt="프리미엄 프라이빗 룸 인테리어 - 럭셔리한 조명과 고급 소파가 있는 VIP룸"
             class="absolute inset-0 w-full h-full object-cover"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent"></div>
           <div class="absolute bottom-0 p-8">
