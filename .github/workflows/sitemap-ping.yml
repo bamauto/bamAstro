@@ -23,6 +23,7 @@ jobs:
             "public-karaoke.com"    # 수원
             "korea-karaoke.com"     # 평택
             "nextkaraoke.com"       # 안양
+            "hot-karaoke.com"       # 수지
           )
 
           for domain in "${DOMAINS[@]}"; do

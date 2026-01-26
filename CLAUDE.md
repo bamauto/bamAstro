@@ -19,6 +19,7 @@
 | 수원 | suwon | public-karaoke.com |
 | 평택 | pyeongtaek | korea-karaoke.com |
 | 안양 | anyang | nextkaraoke.com |
+| 수지 | suji | hot-karaoke.com |
 
 ## 새 지역 추가 시 필수 작업
 
@@ -61,6 +62,7 @@ bamAstro/
 │   ├── suwon/        # 수원 사이트
 │   ├── pyeongtaek/   # 평택 사이트
 │   ├── anyang/       # 안양 사이트
+│   ├── suji/         # 수지 사이트
 │   └── template/     # 새 지역 템플릿
 ├── packages/
 │   └── ui/           # 공통 UI 컴포넌트
