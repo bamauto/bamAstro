@@ -19,6 +19,9 @@ interface Props {
     domain: string;
     lang: string;
   }>;
+  // Pagination props (for blog pages)
+  currentPage?: number;
+  totalPages?: number;
 }
 
 const {
@@ -34,7 +37,24 @@ const {
   dateModified,
   author = '서우실장',
   alternateRegions = [],
+  currentPage,
+  totalPages,
 } = Astro.props;
+
+// Generate pagination URLs
+const baseUrl = `https://${region.domain}`;
+const pathWithoutPage = Astro.url.pathname.replace(/\/page\/\d+\/?$/, '');
+const getPrevUrl = () => {
+  if (!currentPage || currentPage <= 1) return null;
+  if (currentPage === 2) return `${baseUrl}${pathWithoutPage}`;
+  return `${baseUrl}${pathWithoutPage}/page/${currentPage - 1}`;
+};
+const getNextUrl = () => {
+  if (!currentPage || !totalPages || currentPage >= totalPages) return null;
+  return `${baseUrl}${pathWithoutPage}/page/${currentPage + 1}`;
+};
+const prevUrl = getPrevUrl();
+const nextUrl = getNextUrl();
 
 const fullTitle = title;
 const fullOgImage = `https://${region.domain}${ogImage}`;
@@ -92,3 +112,7 @@ const currentPath = Astro.url.pathname;
   <link rel="alternate" hreflang={alt.lang} href={`https://${alt.domain}${currentPath}`} />
 ))}
 <link rel="alternate" hreflang="x-default" href={canonical} />
+
+<!-- Pagination rel tags for paginated content -->
+{prevUrl && <link rel="prev" href={prevUrl} />}
+{nextUrl && <link rel="next" href={nextUrl} />}
