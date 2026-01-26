@@ -47,6 +47,7 @@ const seoProps = {
   ogType: 'article' as const,
   datePublished: post.published_at || post.created_at,
   dateModified: post.updated_at || post.created_at,
+  ogImage: post.featured_image || '/og-home.jpg',
 };
 ---
 

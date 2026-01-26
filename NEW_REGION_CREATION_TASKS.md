@@ -633,17 +633,17 @@ git push
 
 ---
 
-## Phase 16: 이미지 교체
+## Phase 16: 이미지 교체 (필수!)
 
-> 사이트 차별화와 지역 특화를 위해 **강력 권장**되는 단계입니다. 고유한 이미지를 사용하면 SEO와 사용자 경험이 크게 향상됩니다.
+> ⚠️ **매우 중요:** 신규 지역 생성 시 **반드시** 이미지를 교체해야 합니다!
+> 다른 지역과 동일한 이미지를 사용하면 Google 중복 콘텐츠 필터링에 걸릴 수 있습니다.
 
-**목적:** 지역 특화 이미지 또는 고품질 이미지로 교체하여 사이트 차별화
+**목적:** 지역별 고유 이미지로 교체하여 SEO 중복 방지 및 사이트 차별화
 
-### ⚠️ 중요: 이미지 폴더 구조 이해
+### ⚠️ 핵심 원칙: 다른 지역과 중복 금지!
 
-> **경고:** 모든 지역 사이트(bundang, gangnam, suwon, ingedong)는 **동일한 이미지 세트를 공유**합니다.
-> 한 지역만 이미지를 변경하면 다른 지역과 불일치가 발생합니다.
-> **이미지 교체 시 모든 지역을 동시에 변경하거나, 정상 지역(예: suwon)에서 복사하세요.**
+> **절대 금지:** 기존 지역의 이미지를 그대로 복사하지 마세요!
+> **반드시:** 갤러리 소스 폴더에서 새 이미지를 선택하여 교체하세요!
 
 ```
 apps/[지역]/public/images/
@@ -668,34 +668,84 @@ apps/[지역]/public/images/
 | 제휴 업소 안내 | `venues/` | *_main.webp, *_1-6.webp | VenuePreviewSection |
 | 다양한 스타일의 매력적인 파트너 | `partners/` | partner_1-10.webp | GallerySection |
 
-### 16.1 이미지 소스 준비
+### 16.1 이미지 소스 폴더 (필수 확인!)
 
-- [ ] 갤러리 이미지 폴더 준비
-  - 최소 50개 이상의 고품질 이미지 권장
-  - WebP, JPG, PNG 형식 지원
-  - 권장 해상도: 800-1200px
-
-### 16.2 이미지 복사 (수동 방법 - 권장)
-
-**정상 지역에서 복사하는 방법:**
-```bash
-# 수원(suwon)이 정상일 경우, 다른 지역으로 복사
-cp -r apps/suwon/public/images/venues apps/[지역]/public/images/
-cp -r apps/suwon/public/images/partners apps/[지역]/public/images/
+**갤러리 소스 폴더:**
+```
+/Users/deneb/Downloads/제목을 입력해주세요_분류완료/gallery/
 ```
 
-**전체 지역 동시 복사:**
+- [ ] 갤러리 폴더에 최소 50개 이상의 이미지 있는지 확인
+- [ ] 기존 지역에서 사용하지 않은 이미지 확인
+- [ ] WebP, JPG, PNG 형식 지원
+- [ ] 권장 해상도: 800-1200px
+
+### 16.2 partners 이미지 교체 (필수! - 다른 지역과 중복 금지)
+
+> **⚠️ 경고:** 기존 지역에서 이미지를 복사하면 안 됩니다!
+> 갤러리 소스 폴더에서 **새 이미지**를 랜덤 선택하여 교체하세요!
+
+**partners 이미지 랜덤 교체 (macOS):**
 ```bash
-# 수원 기준으로 모든 지역 이미지 동기화
-for region in bundang gangnam ingedong; do
-  rm -rf apps/$region/public/images/venues
-  rm -rf apps/$region/public/images/partners
-  cp -r apps/suwon/public/images/venues apps/$region/public/images/
-  cp -r apps/suwon/public/images/partners apps/$region/public/images/
+# 갤러리 소스 폴더
+GALLERY="/Users/deneb/Downloads/제목을 입력해주세요_분류완료/gallery"
+
+# 신규 지역 partners 폴더
+TARGET="apps/[지역영문명]/public/images/partners"
+
+# 랜덤으로 10개 이미지 선택 후 복사 (macOS에서 shuf 대신 awk 사용)
+files=($(ls "$GALLERY"/*.{jpg,jpeg,png,webp} 2>/dev/null | awk 'BEGIN{srand()} {print rand()"\t"$0}' | sort -n | cut -f2 | head -10))
+
+# partner_1~10.webp로 복사
+for i in {1..10}; do
+  cp "${files[$((i-1))]}" "$TARGET/partner_$i.webp"
 done
 ```
 
-### 16.3 교체 대상 이미지 목록
+**체크리스트:**
+- [ ] partner_1.webp ~ partner_10.webp 10개 파일 교체 완료
+- [ ] 기존 지역(gangnam, bundang 등)과 중복되지 않는지 확인
+- [ ] 이미지 파일 용량 확인 (각 50-200KB 권장)
+
+### 16.3 og-*.jpg 이미지 생성 (필수! - partners 이미지 기반)
+
+> **중요:** og 이미지는 partners 이미지를 기반으로 생성합니다!
+> partners 이미지를 먼저 교체한 후 이 단계를 진행하세요.
+
+**ImageMagick으로 og 이미지 생성:**
+```bash
+cd apps/[지역영문명]/public
+
+# partners 이미지 → og 이미지 변환 (1200x630, 소셜 미디어 최적화)
+convert images/partners/partner_1.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-karaoke.jpg
+convert images/partners/partner_2.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-highpublic.jpg
+convert images/partners/partner_3.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-hostbar.jpg
+convert images/partners/partner_4.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-roomsalon.jpg
+convert images/partners/partner_5.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-shirtsroom.jpg
+convert images/partners/partner_6.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-kimonoroom.jpg
+```
+
+**og 이미지 매핑:**
+| 소스 이미지 | 결과 파일 | 용도 |
+|------------|----------|------|
+| partner_1.webp | og-karaoke.jpg | 가라오케 가이드 |
+| partner_2.webp | og-highpublic.jpg | 하이퍼블릭 가이드 |
+| partner_3.webp | og-hostbar.jpg | 호스트바 가이드 |
+| partner_4.webp | og-roomsalon.jpg | 룸살롱 가이드 |
+| partner_5.webp | og-shirtsroom.jpg | 셔츠룸 가이드 |
+| partner_6.webp | og-kimonoroom.jpg | 기모노룸 가이드 |
+
+**체크리스트:**
+- [ ] ImageMagick 설치 확인 (`brew install imagemagick`)
+- [ ] og-karaoke.jpg 생성 완료
+- [ ] og-highpublic.jpg 생성 완료
+- [ ] og-hostbar.jpg 생성 완료
+- [ ] og-roomsalon.jpg 생성 완료
+- [ ] og-shirtsroom.jpg 생성 완료
+- [ ] og-kimonoroom.jpg 생성 완료
+- [ ] 모든 og 이미지 크기 확인 (1200x630px)
+
+### 16.4 교체 대상 이미지 목록
 
 #### 1. venues/ - 제휴 업소 안내 섹션 (38개)
 
@@ -737,7 +787,7 @@ done
 - [ ] **대표 이미지**
   - [지역명]-highpublic-karaoke-private-room.webp
 
-### 16.4 빌드 테스트
+### 16.5 빌드 테스트
 
 - [ ] 이미지 교체 후 빌드 테스트
   ```bash
@@ -748,7 +798,7 @@ done
   - [ ] 빌드 에러 없음 확인
   - [ ] 이미지 경로 오류 없음 확인
 
-### 16.5 이미지 최적화 (권장)
+### 16.6 이미지 최적화 (권장)
 
 - [ ] **이미지 압축**
   - Squoosh (https://squoosh.app/) 사용
@@ -764,7 +814,7 @@ done
 
 
 
-### 16.7 성능 확인
+### 16.8 성능 확인
 
 - [ ] **Lighthouse 점수 측정**
   ```bash
@@ -779,7 +829,7 @@ done
 - [ ] **WebP 지원 확인**
   - 브라우저에서 WebP 형식 정상 표시 확인
 
-### 16.8 문제 해결
+### 16.9 문제 해결
 
 **이미지가 표시되지 않을 때:**
 

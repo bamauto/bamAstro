@@ -28,9 +28,23 @@
 
 1. **이 문서 갱신**: 위 도메인 목록에 새 지역 정보 추가
 2. **region.ts 설정**: `apps/{지역}/src/config/region.ts` 파일에 도메인 설정
-3. **이미지 파일 추가**:
-   - `apps/{지역}/public/images/{지역}-highpublic-karaoke-private-room.webp`
-   - `apps/{지역}/public/images/venues/*_main.webp` (6개)
+3. **⚠️ 이미지 교체 (매우 중요!)**:
+   - **partners 이미지**: `apps/{지역}/public/images/partners/partner_1~10.webp`
+     - 소스: `/Users/deneb/Downloads/제목을 입력해주세요_분류완료/gallery/` 에서 랜덤 선택
+     - 다른 지역과 중복되지 않는 새 이미지로 교체 필수!
+   - **venues 이미지**: `apps/{지역}/public/images/venues/` 폴더 전체
+     - `karaoke_main.webp`, `hyperpublic_main.webp`, `hostbar_main.webp` 등
+   - **og 이미지 생성**: partners 이미지 기반으로 og-*.jpg 6개 생성
+     ```bash
+     cd apps/{지역}/public
+     convert images/partners/partner_1.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-karaoke.jpg
+     convert images/partners/partner_2.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-highpublic.jpg
+     convert images/partners/partner_3.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-hostbar.jpg
+     convert images/partners/partner_4.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-roomsalon.jpg
+     convert images/partners/partner_5.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-shirtsroom.jpg
+     convert images/partners/partner_6.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-kimonoroom.jpg
+     ```
+   - **기존 이미지 복사 금지**: 템플릿/다른 지역 이미지 그대로 사용 절대 금지
 4. **.env 파일 생성**: Supabase 연결 정보 설정
 5. **vercel.json 빌드 설정 (필수!)**:
    ```json
