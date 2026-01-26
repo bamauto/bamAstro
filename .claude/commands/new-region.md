@@ -270,6 +270,28 @@ rm -rf .vercel
 vercel --prod --yes --name bamastro-[지역영문명]
 ```
 
+### 8.2.1 Root Directory 설정 (필수!)
+
+> ⚠️ **매우 중요**: monorepo 구조에서 Root Directory를 설정하지 않으면 빌드가 실패할 수 있음!
+
+프로젝트 생성 후 **Vercel API로 Root Directory 설정**:
+
+```bash
+# .vercel/project.json에서 projectId 확인
+PROJECT_ID=$(cat .vercel/project.json | python3 -c "import sys,json;print(json.load(sys.stdin)['projectId'])")
+
+# Vercel 인증 토큰 가져오기
+VERCEL_TOKEN=$(cat "/Users/deneb/Library/Application Support/com.vercel.cli/auth.json" | python3 -c "import sys,json;print(json.load(sys.stdin)['token'])")
+
+# Root Directory 설정 API 호출
+curl -X PATCH "https://api.vercel.com/v9/projects/$PROJECT_ID" \
+  -H "Authorization: Bearer $VERCEL_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"rootDirectory": "apps/[지역영문명]"}'
+```
+
+**확인**: 응답에 `"rootDirectory":"apps/[지역영문명]"` 포함되면 성공
+
 프로젝트 생성 후 `.vercel/project.json` 수정:
 
 ```json
@@ -288,24 +310,33 @@ vercel --prod --yes --name bamastro-[지역영문명]
 
 ### 8.3 Supabase 환경변수 설정 (필수!)
 
-> ⚠️ **매우 중요**: 환경변수 없으면 블로그 글이 표시되지 않음!
+> ⚠️ **매우 중요**: 환경변수 없으면 `supabaseUrl is required` 에러로 500 발생!
 >
-> ⚠️ **주의**: Vercel CLI로 환경변수를 echo | vercel env add 방식으로 추가하면 값이 잘못 저장될 수 있음!
-> **권장 방법**: .env 파일 생성 후 빌드하면 환경변수가 빌드에 하드코딩됨 (prebuilt 배포 시 Vercel 환경변수 불필요)
+> SSR 모드에서는 **Vercel 환경변수 설정 필수** (빌드 타임 + 런타임 모두 필요)
 
 ```bash
 cd apps/[지역영문명]
 
-# 방법 1: .env 파일 생성 (권장)
-cat > .env << 'EOF'
-SUPABASE_URL=https://rrzeapykmyrsiqmkwjcf.supabase.co
-SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyemVhcHlrbXlyc2lxbWt3amNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MDI0MzIsImV4cCI6MjA4NDQ3ODQzMn0.1syiV186n8K4pJnCqMXNBR4N4fr0BHnSba5sBrtMjGk
-EOF
+# SUPABASE_URL 추가 (production, preview, development 각각)
+printf 'https://rrzeapykmyrsiqmkwjcf.supabase.co' | vercel env add SUPABASE_URL production
+printf 'https://rrzeapykmyrsiqmkwjcf.supabase.co' | vercel env add SUPABASE_URL preview
+printf 'https://rrzeapykmyrsiqmkwjcf.supabase.co' | vercel env add SUPABASE_URL development
 
-# 빌드 후 prebuilt 배포 (환경변수가 빌드에 포함됨)
-cd ../.. && pnpm --filter @bamastro/[지역영문명] build
-cd apps/[지역영문명] && vercel deploy --prebuilt --prod
+# SUPABASE_KEY 추가 (production, preview, development 각각)
+printf 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyemVhcHlrbXlyc2lxbWt3amNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MDI0MzIsImV4cCI6MjA4NDQ3ODQzMn0.1syiV186n8K4pJnCqMXNBR4N4fr0BHnSba5sBrtMjGk' | vercel env add SUPABASE_KEY production
+printf 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyemVhcHlrbXlyc2lxbWt3amNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MDI0MzIsImV4cCI6MjA4NDQ3ODQzMn0.1syiV186n8K4pJnCqMXNBR4N4fr0BHnSba5sBrtMjGk' | vercel env add SUPABASE_KEY preview
+printf 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyemVhcHlrbXlyc2lxbWt3amNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MDI0MzIsImV4cCI6MjA4NDQ3ODQzMn0.1syiV186n8K4pJnCqMXNBR4N4fr0BHnSba5sBrtMjGk' | vercel env add SUPABASE_KEY development
+
+# 환경변수 설정 확인
+vercel env ls
+# 예상 결과:
+# SUPABASE_KEY  Encrypted  Development  ...
+# SUPABASE_KEY  Encrypted  Preview      ...
+# SUPABASE_KEY  Encrypted  Production   ...
+# SUPABASE_URL  Encrypted  Production, Preview, Development  ...
 ```
+
+> ⚠️ **주의**: `echo` 대신 `printf`를 사용해야 함 (echo는 줄바꿈 추가로 값이 잘못됨)
 
 ### 8.4 빌드 및 배포
 

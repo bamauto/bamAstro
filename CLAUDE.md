@@ -21,6 +21,8 @@
 | 안양 | anyang | nextkaraoke.com |
 | 수지 | suji | hot-karaoke.com |
 | 안산 | ansan | hot-karaoke.net |
+| 판교 | pangyo | new-karaoke.com |
+| 성남 | seongnam | new-karaoke.net |
 
 ## 새 지역 추가 시 필수 작업
 
@@ -45,7 +47,21 @@
      convert images/partners/partner_6.webp -resize 1200x630^ -gravity center -extent 1200x630 -quality 85 og-kimonoroom.jpg
      ```
    - **기존 이미지 복사 금지**: 템플릿/다른 지역 이미지 그대로 사용 절대 금지
-4. **.env 파일 생성**: Supabase 연결 정보 설정
+4. **Vercel 환경변수 설정 (필수!)**:
+   ```bash
+   cd apps/{지역}
+   # SUPABASE_URL 추가
+   printf 'https://rrzeapykmyrsiqmkwjcf.supabase.co' | vercel env add SUPABASE_URL production
+   printf 'https://rrzeapykmyrsiqmkwjcf.supabase.co' | vercel env add SUPABASE_URL preview
+   printf 'https://rrzeapykmyrsiqmkwjcf.supabase.co' | vercel env add SUPABASE_URL development
+   # SUPABASE_KEY 추가
+   printf 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyemVhcHlrbXlyc2lxbWt3amNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MDI0MzIsImV4cCI6MjA4NDQ3ODQzMn0.1syiV186n8K4pJnCqMXNBR4N4fr0BHnSba5sBrtMjGk' | vercel env add SUPABASE_KEY production
+   printf 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyemVhcHlrbXlyc2lxbWt3amNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MDI0MzIsImV4cCI6MjA4NDQ3ODQzMn0.1syiV186n8K4pJnCqMXNBR4N4fr0BHnSba5sBrtMjGk' | vercel env add SUPABASE_KEY preview
+   printf 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyemVhcHlrbXlyc2lxbWt3amNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MDI0MzIsImV4cCI6MjA4NDQ3ODQzMn0.1syiV186n8K4pJnCqMXNBR4N4fr0BHnSba5sBrtMjGk' | vercel env add SUPABASE_KEY development
+   # 확인
+   vercel env ls
+   ```
+   > ⚠️ **중요**: SSR 모드에서 환경변수가 없으면 `supabaseUrl is required` 에러 발생!
 5. **vercel.json 빌드 설정 (필수!)**:
    ```json
    {
@@ -56,6 +72,17 @@
    }
    ```
    > ⚠️ **중요**: 이 설정 없으면 Vercel 빌드 시 `astro: command not found` 에러 발생
+6. **Vercel Root Directory 설정 (필수!)**:
+   ```bash
+   # .vercel/project.json에서 projectId 확인 후 API 호출
+   PROJECT_ID=$(cat .vercel/project.json | python3 -c "import sys,json;print(json.load(sys.stdin)['projectId'])")
+   VERCEL_TOKEN=$(cat "/Users/deneb/Library/Application Support/com.vercel.cli/auth.json" | python3 -c "import sys,json;print(json.load(sys.stdin)['token'])")
+   curl -X PATCH "https://api.vercel.com/v9/projects/$PROJECT_ID" \
+     -H "Authorization: Bearer $VERCEL_TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{"rootDirectory": "apps/{지역}"}'
+   ```
+   > ⚠️ **중요**: monorepo 구조에서 Root Directory 미설정 시 빌드 실패
 6. **pnpm-lock.yaml 업데이트 및 커밋**: 새 지역 추가 후 반드시 실행
    ```bash
    pnpm install --no-frozen-lockfile
@@ -79,6 +106,8 @@ bamAstro/
 │   ├── anyang/       # 안양 사이트
 │   ├── suji/         # 수지 사이트
 │   ├── ansan/        # 안산 사이트
+│   ├── pangyo/       # 판교 사이트
+│   ├── seongnam/     # 성남 사이트
 │   └── template/     # 새 지역 템플릿
 ├── packages/
 │   └── ui/           # 공통 UI 컴포넌트
