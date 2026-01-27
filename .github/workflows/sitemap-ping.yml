@@ -26,6 +26,8 @@ jobs:
             "hot-karaoke.com"       # 수지
             "hot-karaoke.net"       # 안산
             "new-karaoke.com"       # 판교
+            "new-karaoke.net"       # 성남
+            "new-hipublic.com"      # 용인
           )
 
           for domain in "${DOMAINS[@]}"; do

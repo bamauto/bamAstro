@@ -1,0 +1,54 @@
+# ====================================
+# SEO Robots.txt - new-hipublic.com
+# 용인 가라오케/유흥 가이드 사이트
+# ====================================
+# Last Updated: 2026-01-27
+# 최적화: 글로벌 + 한국 검색엔진
+
+# Default rules for all crawlers
+User-agent: *
+Allow: /
+
+# Disallow sensitive pages
+Disallow: /api/
+Disallow: /404
+Disallow: /admin/
+Disallow: /internal/
+
+# Allow static assets (Astro builds)
+Allow: /_astro/*.css$
+Allow: /_astro/*.js$
+Allow: /images/
+Allow: /fonts/
+
+# ====================================
+# Google-specific rules
+# ====================================
+User-agent: Googlebot
+Allow: /
+
+# ====================================
+# Naver (Korean Search Engine)
+# ====================================
+User-agent: Yeti
+Allow: /
+
+User-agent: Yeti-JSC
+Allow: /
+
+# ====================================
+# Daum (Korean Search Engine)
+# ====================================
+User-agent: Daumoa
+Allow: /
+
+# ====================================
+# Bing
+# ====================================
+User-agent: Bingbot
+Allow: /
+
+# ====================================
+# Sitemaps
+# ====================================
+Sitemap: https://new-hipublic.com/sitemap-index.xml

@@ -23,6 +23,7 @@
 | 안산 | ansan | hot-karaoke.net |
 | 판교 | pangyo | new-karaoke.com |
 | 성남 | seongnam | new-karaoke.net |
+| 용인 | yongin | new-hipublic.com |
 
 ## 새 지역 추가 시 필수 작업
 
@@ -108,6 +109,7 @@ bamAstro/
 │   ├── ansan/        # 안산 사이트
 │   ├── pangyo/       # 판교 사이트
 │   ├── seongnam/     # 성남 사이트
+│   ├── yongin/       # 용인 사이트
 │   └── template/     # 새 지역 템플릿
 ├── packages/
 │   └── ui/           # 공통 UI 컴포넌트
